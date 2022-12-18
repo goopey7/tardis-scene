@@ -7,16 +7,18 @@
 #define _SCENE_H
 
 // Include GLUT, openGL, input.
-#include "glut.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include "Input.h"
 #include <stdio.h>
 // Further includes should go here:
-#include "SOIL.h"
+#include <SOIL/SOIL.h>
 #include <vector>
 #include "Shadow.h"
+#include <cstring>
 
+#define sprintf_s(buf, ...) snprintf((buf), sizeof(buf), __VA_ARGS__)
 
 class Scene{
 

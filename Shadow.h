@@ -1,8 +1,8 @@
 #pragma once
 
-#include "glut.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #include <vector>
 #include "Vector3.h"
 
