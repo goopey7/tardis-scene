@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include <GL/freeglut_std.h>
 #include <GL/gl.h>
 
 // Scene constructor, initilises OpenGL
@@ -46,6 +47,8 @@ Scene::Scene(Input *in)
 void Scene::handleInput(float dt)
 {
 	// Handle user input
+	bool anyKeyDown = input->anyKeyDown();
+
 	if(input->isKeyDown('r'))
 	{
 		bIsWireframe = !bIsWireframe;
@@ -62,68 +65,37 @@ void Scene::handleInput(float dt)
 		cam.translate(cam.getForwardVector().getOpposite() * dt * strafeSpeed);
 	}
 
-	if(input->isKeyDown('d'))
+	if(input->isKeyDown('a'))
 	{
 		cam.translate(cam.getRightVector() * dt * strafeSpeed);
 	}
 
-	if(input->isKeyDown('a'))
+	if(input->isKeyDown('d'))
 	{
 		cam.translate(cam.getRightVector().getOpposite() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('e'))
 	{
-		cam.translate(cam.getUpVector() * dt * strafeSpeed);
+		cam.translate(cam.getUpVector().getOpposite() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('q'))
 	{
-		cam.translate(cam.getUpVector().getOpposite() * dt * strafeSpeed);
-	}
-
-	if(input->isKeyDown('j'))
-	{
-		cam.rotate({0.f,-rotateSpeed*dt,0.f});
-		cam.updateRotation();
-	}
-	if(input->isKeyDown('l'))
-	{
-		cam.rotate({0.f,rotateSpeed*dt,0.f});
-		cam.updateRotation();
-	}
-	if(input->isKeyDown('i'))
-	{
-		cam.rotate({rotateSpeed*dt,0.f,0.f});
-		cam.updateRotation();
-	}
-	if(input->isKeyDown('k'))
-	{
-		cam.rotate({-rotateSpeed*dt,0.f,0.f});
-		cam.updateRotation();
-	}
-	if(input->isKeyDown('u'))
-	{
-		cam.rotate({0.f,0.f,rotateSpeed*dt});
-		cam.updateRotation();
-	}
-	if(input->isKeyDown('o'))
-	{
-		cam.rotate({0.f,0.f,-rotateSpeed*dt});
-		cam.updateRotation();
+		cam.translate(cam.getUpVector() * dt * strafeSpeed);
 	}
 
 	// mouse input
 	if(input->getMouseX() != width/2)
 	{
 		float mouseDiff = input->getMouseX() - width/2.f;
-		cam.rotate({0.f,-rotateSpeed*mouseDiff,0.f});
+		cam.rotate({0.f,rotateSpeed*mouseDiff,0.f});
 		cam.updateRotation();
 	}
 	if(input->getMouseY() != height/2)
 	{
 		float mouseDiff = input->getMouseY() - height/2.f;
-		cam.rotate({-mouseDiff*rotateSpeed,0.f,0.f});
+		cam.rotate({mouseDiff*rotateSpeed,0.f,0.f});
 		cam.updateRotation();
 	}
 
@@ -156,7 +128,7 @@ void Scene::render() {
 
 	gluLookAt(camPos.x,camPos.y,camPos.z,
 			camLookAt.x,camLookAt.y,camLookAt.z,
-			camUp.x,camUp.y,camUp.z);
+			-camUp.x,-camUp.y,-camUp.z);
 
 	if(bIsWireframe)
 	{
@@ -247,8 +219,10 @@ void Scene::renderTextOutput()
 {
 	// Render current mouse position and frames per second.
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
+	sprintf_s(pos, "Pos: {%f,%f,%f}", cam.getPosition().x,cam.getPosition().y,cam.getPosition().z);
 	displayText(-1.f, 0.96f, 1.f, 0.f, 0.f, mouseText);
 	displayText(-1.f, 0.90f, 1.f, 0.f, 0.f, fps);
+	displayText(-1.f, 0.80f, 1.f, 0.f, 0.f, pos);
 }
 
 // Renders text to screen. Must be called last in render function (before swap buffers)

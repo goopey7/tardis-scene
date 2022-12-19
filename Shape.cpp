@@ -164,11 +164,11 @@ void Shape::renderSphere(float radius, unsigned long numLat, unsigned long numLo
 
 			// render
 			glBegin(GL_QUADS);
-				//glColor3f(1.f,0.f,0.f);
-				float u = (float)lats/numLat;
-				float v1 = (float)(numLong-longs)/numLong;
-				float u1 = (float)(lats+1)/numLat;
-				float v = (float)(numLong-longs+1)/numLong;
+				float u = (float)(numLat-lats+1)/numLat;
+				float v = (float)(longs)/numLong;
+				float u1 = (float)(numLat-lats)/numLat;
+				float v1 = (float)(longs+1)/numLong;
+
 				glTexCoord2f(u,v);
 				glVertex3fv(verts[lats][longs]);
 

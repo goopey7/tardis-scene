@@ -7,6 +7,7 @@ Camera::Camera()
 {
 	forward.set(0.f,0.f,1.f);
 	up.set(0.f,1.f,0.f);
+	rotate({rotation.pitch,rotation.yaw,rotation.roll});
 	updateRotation();
 }
 

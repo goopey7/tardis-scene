@@ -73,6 +73,7 @@ protected:
 	int frame = 0, time, timebase = 0;
 	char fps[40];
 	char mouseText[40];
+	char pos[40];
 
 	bool bIsWireframe = false;
 

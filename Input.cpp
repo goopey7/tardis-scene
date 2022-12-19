@@ -82,3 +82,14 @@ bool Input::isMouseRDown()
 {
 	return mouse.right;
 }
+
+bool Input::anyKeyDown() const
+{
+	for(int i=0; i<256; i++)
+	{
+		if(keys[i])
+			return true;
+	}
+	return false;
+}
+

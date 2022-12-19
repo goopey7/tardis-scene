@@ -32,6 +32,8 @@ public:
 	void setMouseRDown(bool down);
 	bool isMouseRDown();
 
+	bool anyKeyDown() const;
+
 private:
 	// Boolean array, element per key
 	// Mouse struct object.
