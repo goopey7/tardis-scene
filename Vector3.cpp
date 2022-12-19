@@ -26,11 +26,11 @@ bool Vector3::equals(const Vector3& v2)
 }
 
 
-float Vector3::length() {
+float Vector3::length() const {
 	return (float)sqrt(this->lengthSquared());
 }
 
-float Vector3::lengthSquared() {
+float Vector3::lengthSquared() const {
 	return (
 		this->x*this->x +
 		this->y*this->y +
@@ -48,14 +48,14 @@ void Vector3::normalise() {
 	}
 }
 
-Vector3 Vector3::normalised()
+Vector3 Vector3::normalised() const
 {
 	Vector3 norm(x, y, z);
 	norm.normalise();
 	return norm;
 }
 
-Vector3 Vector3::cross(const Vector3& v2) {
+Vector3 Vector3::cross(const Vector3& v2) const{
 	Vector3 cross(
 		(this->y * v2.z - this->z * v2.y),
 		(this->z * v2.x - this->x * v2.z),
@@ -119,12 +119,17 @@ void Vector3::add(const Vector3& v1, float scale) {
 	this->z += (v1.z*scale);
 }
 
-Vector3 Vector3::operator+(const Vector3& v2) {
+Vector3 Vector3::operator+(const Vector3& v2) const{
 	return Vector3(this->x + v2.x, this->y + v2.y, this->z + v2.z);
 }
 
-Vector3 Vector3::operator-(const Vector3& v2) {
+Vector3 Vector3::operator-(const Vector3& v2) const{
 	return Vector3(this->x - v2.x, this->y - v2.y, this->z - v2.z);
+}
+
+Vector3 Vector3::operator*(const float &f) const
+{
+	return Vector3(x*f,y*f,z*f);
 }
 
 Vector3& Vector3::operator+=(const Vector3& v2) {
@@ -140,3 +145,16 @@ Vector3& Vector3::operator-=(const Vector3& v2) {
 	this->z -= v2.z;
 	return *this;
 }
+
+void Vector3::set(const Vector3& vec)
+{
+	this->x = vec.x;
+	this->y = vec.y;
+	this->z = vec.z;
+}
+
+const Vector3 Vector3::getOpposite() const
+{
+	return {-x,-y,-z};
+}
+

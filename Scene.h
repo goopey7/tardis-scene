@@ -7,7 +7,7 @@
 #define _SCENE_H
 
 // Include GLUT, openGL, input.
-#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "Input.h"
@@ -15,10 +15,14 @@
 // Further includes should go here:
 #include <SOIL/SOIL.h>
 #include <vector>
-#include "Shadow.h"
-#include <cstring>
+#include <string.h>
+
+#include "Camera.h"
+#include "Shape.h"
+#include "Skybox.h"
 
 #define sprintf_s(buf, ...) snprintf((buf), sizeof(buf), __VA_ARGS__)
+
 
 class Scene{
 
@@ -41,8 +45,21 @@ protected:
 	// A function to collate all text output in a single location
 	void renderTextOutput();
 	void calculateFPS();
+	
 
 	// draw primitive functions
+	void renderSquare(float xOffset);
+	void renderTriangle(float xOffset);
+	void renderTriangleStrip(float xOffset);
+	void renderTriangleFan(float xOffset);
+	void renderQuads(float xOffset);
+	void renderPentagon(float xOffset);
+	void renderCube();
+	void renderPlane();
+	void renderPlaneDetailed();
+	void renderSphere();
+	void renderRoom();
+	void renderDice();
 	
 
 	// For access to user input.
@@ -57,6 +74,17 @@ protected:
 	char fps[40];
 	char mouseText[40];
 
+	bool bIsWireframe = false;
+
+	float angle = 0.f;
+	float strafeSpeed = 10.f;
+	float rotateSpeed = 0.1f;
+
+	Camera cam;
+	Skybox skybox;
+
+	//GLuint dice;
+	GLuint crate;
 };
 
 #endif

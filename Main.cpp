@@ -12,6 +12,8 @@
 #include "Scene.h"
 #include "Input.h"
 
+#define ESCAPE_KEY 27
+
 // Required variables; pointer to scene and input objects. Initialise variable used in delta time calculation.
 Scene* scene;
 Input* input;
@@ -51,7 +53,7 @@ void renderScene(void)
 void processNormalKeys(unsigned char key, int x, int y)
 {
 	// If the ESCAPE key was pressed, exit application.
-	if (key == 27)	// Escape key (in non-windows you can use 27, the ASCII value for escape)
+	if (key == ESCAPE_KEY)	// Escape key (in non-windows you can use 27, the ASCII value for escape)
 		exit(0);
 	// Send key down to input class.
 	input->setKeyDown(key);

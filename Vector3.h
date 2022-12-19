@@ -15,6 +15,7 @@ public:
 
 
 	void set(float x, float y, float z);
+	void set(const Vector3& vec);
 	void setX(float x);
 	void setY(float y);
 	void setZ(float z);
@@ -27,22 +28,27 @@ public:
 	void subtract(const Vector3& v1, float scale = 1.0);
 	void scale(float scale);
 
+	const Vector3 getOpposite() const;
+
 	float dot(const Vector3& v2);
-	Vector3 cross(const Vector3& v2);
+	Vector3 cross(const Vector3& v2) const;
 
 	void normalise();
-	Vector3 normalised();
-	float length();
-	float lengthSquared();
+	Vector3 normalised() const;
+	float length() const;
+	float lengthSquared() const;
 
 	bool equals(const Vector3& v2, float epsilon);
 	bool equals(const Vector3& v2);
 
-	Vector3 operator+(const Vector3& v2);
-	Vector3 operator-(const Vector3& v2);
+	Vector3 operator+(const Vector3& v2) const;
+	Vector3 operator-(const Vector3& v2) const;
+
+	Vector3 operator*(const float& f) const;
 
 	Vector3& operator+=(const Vector3& v2);
 	Vector3& operator-=(const Vector3& v2);
+
 
 	float x;
 	float y;
