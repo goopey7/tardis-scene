@@ -142,44 +142,49 @@ void Shape::renderSphere(float radius, unsigned long numLat, unsigned long numLo
 	{
 		for(int lats = 0; lats < numLat; lats++)
 		{
+
+			int nextLat = lats+1;
+			int nextLong = longs+1;
+
 			// [lats][longs]
 			verts[lats][longs][0]= radius * std::cos(lats*theta) * std::sin(longs*delta); //x
 			verts[lats][longs][1]= radius * std::cos(longs*delta); //y
 			verts[lats][longs][2]= radius * std::sin(lats*theta) * std::sin(longs*delta); //z
 
-			// [lats][longs+1]
-			verts[lats][longs+1][0]= radius * std::cos(lats*theta) * std::sin((longs+1)*delta); //x
-			verts[lats][longs+1][1]= radius * std::cos((longs+1)*delta); //y
-			verts[lats][longs+1][2]= radius * std::sin(lats*theta) * std::sin((longs+1)*delta); //z
+			// [lats][nextLong]
+			verts[lats][nextLong][0]= radius * std::cos(lats*theta) * std::sin(nextLong*delta); //x
+			verts[lats][nextLong][1]= radius * std::cos(nextLong*delta); //y
+			verts[lats][nextLong][2]= radius * std::sin(lats*theta) * std::sin(nextLong*delta); //z
 
-			// [lats+1][longs+1]
-			verts[lats+1][longs+1][0]= radius * std::cos((lats+1)*theta) * std::sin((longs+1)*delta); //x
-			verts[lats+1][longs+1][1]= radius * std::cos((longs+1)*delta); //y
-			verts[lats+1][longs+1][2]= radius * std::sin((lats+1)*theta) * std::sin((longs+1)*delta); //z
+			// [nextLat][nextLong]
+			verts[nextLat][nextLong][0]= radius * std::cos((nextLat)*theta) * std::sin((nextLong)*delta); //x
+			verts[nextLat][nextLong][1]= radius * std::cos((nextLong)*delta); //y
+			verts[nextLat][nextLong][2]= radius * std::sin((nextLat)*theta) * std::sin((nextLong)*delta); //z
 
-			// [lats+1][longs]
-			verts[lats+1][longs][0]= radius * std::cos((lats+1)*theta) * std::sin(longs*delta); //x
-			verts[lats+1][longs][1]= radius * std::cos(longs*delta); //y
-			verts[lats+1][longs][2]= radius * std::sin((lats+1)*theta) * std::sin(longs*delta); //z
+			// [nextLat][longs]
+			verts[nextLat][longs][0]= radius * std::cos((nextLat)*theta) * std::sin(longs*delta); //x
+			verts[nextLat][longs][1]= radius * std::cos(longs*delta); //y
+			verts[nextLat][longs][2]= radius * std::sin((nextLat)*theta) * std::sin(longs*delta); //z
 
 			// render
 			glBegin(GL_QUADS);
-				float u = (float)(numLat-lats+1)/numLat;
-				float v = (float)(longs)/numLong;
-				float u1 = (float)(numLat-lats)/numLat;
-				float v1 = (float)(longs+1)/numLong;
+
+				float u = (float)(numLat-(lats-1))/(numLat+1);
+				float v = (float)(longs)/(numLong+1);
+				float u1 = (float)(numLat-lats)/(numLat+1);
+				float v1 = (float)(nextLong)/(numLong+1);
 
 				glTexCoord2f(u,v);
 				glVertex3fv(verts[lats][longs]);
 
 				glTexCoord2f(u,v1);
-				glVertex3fv(verts[lats][longs+1]);
+				glVertex3fv(verts[lats][nextLong]);
 
 				glTexCoord2f(u1,v1);
-				glVertex3fv(verts[lats+1][longs+1]);
+				glVertex3fv(verts[nextLat][nextLong]);
 
 				glTexCoord2f(u1,v);
-				glVertex3fv(verts[lats+1][longs]);
+				glVertex3fv(verts[nextLat][longs]);
 			glEnd();
 		}
 	}
