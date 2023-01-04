@@ -18,7 +18,8 @@
 #include <string.h>
 
 #include "Camera.h"
-#include "Shape.h"
+#include "PointLight.h"
+#include "Sphere.h"
 #include "Skybox.h"
 
 #define sprintf_s(buf, ...) snprintf((buf), sizeof(buf), __VA_ARGS__)
@@ -87,6 +88,8 @@ protected:
 
 	//GLuint dice;
 	GLuint crate;
+
+	PointLight sunLight;
 };
 
 #endif

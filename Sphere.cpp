@@ -1,8 +1,8 @@
-#include "Shape.h"
+#include "Sphere.h"
 #include <GL/gl.h>
 #include <cmath>
 
-void Shape::renderSphere(float radius, unsigned long numLat, unsigned long numLong, GLuint texture)
+void Sphere::render(float radius, unsigned long numLat, unsigned long numLong, GLuint texture)
 {
 	// TODO Don't regenerate the sphere every frame
 	float theta = 2*PI/numLat;

@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "PointLight.h"
 #include <GL/freeglut_std.h>
 #include <GL/gl.h>
 
@@ -42,6 +43,8 @@ Scene::Scene(Input *in)
 				SOIL_FLAG_MIPMAPS|SOIL_FLAG_NTSC_SAFE_RGB|SOIL_FLAG_COMPRESS_TO_DXT
 				);
 				*/
+
+	sunLight.setDiffuse({1.f,0.7f,0.2f,1.f});
 	
 }
 
@@ -143,24 +146,13 @@ void Scene::render() {
 	}
 
 	skybox.render();
-
-	glPushMatrix();
-	//glRotatef(earthAngle,0.f,1.f,0.f);
-	glTranslatef(1.f,0.f,0.f);
-	GLfloat LightAmbient[] = {0.1f,0.0f,0.3f,1.f};
-	GLfloat LightDiffuse[] = {1.f,1.f,0.f,1.f};
-	GLfloat LightPosition[] = {0.f,0.f,10.f,1.f};
-	glLightfv(GL_LIGHT0,GL_AMBIENT,LightAmbient);
-	glLightfv(GL_LIGHT0,GL_DIFFUSE,LightDiffuse);
-	glLightfv(GL_LIGHT0,GL_POSITION,LightPosition);
-	glEnable(GL_LIGHT0);
-	glPopMatrix();
+	sunLight.render();
 
 	// Render geometry/scene here -------------------------------------
 
 	glPushMatrix();
 		glRotatef(earthAngle,0.f,1.f,0.f);
-		Shape::renderSphere(5.f,100,100,crate);
+		Sphere::render(5.f,100,100,crate);
 	glPopMatrix();
 
 	// End render geometry --------------------------------------

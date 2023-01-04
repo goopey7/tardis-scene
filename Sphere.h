@@ -7,9 +7,9 @@
 
 #define PI 3.14159265358979323846
 
-class Shape
+class Sphere
 {
 public:
-	static void renderSphere(float radius, unsigned long numLat, unsigned long numLong, GLuint texture);
+	static void render(float radius, unsigned long numLat, unsigned long numLong, GLuint texture);
 };
 #endif 
