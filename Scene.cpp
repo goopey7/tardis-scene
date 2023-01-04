@@ -54,7 +54,7 @@ Scene::Scene(Input *in)
 
 	sunLight.setDiffuse({1.f,0.7f,0.2f,1.f});
 
-	teapot.load("models/teapot.obj","gfx/crate.png");
+	spaceship.load("models/spaceship.obj","models/spaceship.jpg");
 	
 }
 
@@ -130,6 +130,7 @@ void Scene::update(float dt)
 	}
 
 	earthAngle+=dt*10.f;
+	spaceshipAngle+=dt*60.f;
 }
 
 void Scene::render() {
@@ -164,9 +165,15 @@ void Scene::render() {
 	// Render geometry/scene here -------------------------------------
 
 	glPushMatrix();
-		glRotatef(earthAngle,0.f,1.f,0.f);
-		//Sphere::render(5.f,100,100,earth);
-		teapot.render();
+		glPushMatrix();
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			Sphere::render(5.f,100,100,earth);
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef(spaceshipAngle,0.f,1.f,0.f);
+			glTranslatef(0.f,0.f,11.f);
+			spaceship.render();
+		glPopMatrix();
 	glPopMatrix();
 
 	// End render geometry --------------------------------------

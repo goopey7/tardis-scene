@@ -81,12 +81,13 @@ protected:
 	bool bIsWireframe = false;
 
 	float earthAngle = 0.f;
+	float spaceshipAngle = 0.f;
 	float strafeSpeed = 10.f;
 	float rotateSpeed = 0.1f;
 
 	Camera cam;
 	Skybox skybox;
-	Model teapot;
+	Model spaceship;
 
 	//GLuint dice;
 	GLuint earth;
