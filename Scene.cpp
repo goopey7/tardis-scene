@@ -112,6 +112,8 @@ void Scene::update(float dt)
 
 	// Move mouse to center
 	glutWarpPointer(width/2,height/2);
+
+	earthAngle+=dt*10.f;
 }
 
 void Scene::render() {
@@ -143,10 +145,10 @@ void Scene::render() {
 	skybox.render();
 
 	glPushMatrix();
-	glRotatef(angle,0.f,1.f,0.f);
+	//glRotatef(earthAngle,0.f,1.f,0.f);
 	glTranslatef(1.f,0.f,0.f);
 	GLfloat LightAmbient[] = {0.1f,0.0f,0.3f,1.f};
-	GLfloat LightDiffuse[] = {1.f,1.f,1.f,1.f};
+	GLfloat LightDiffuse[] = {1.f,1.f,0.f,1.f};
 	GLfloat LightPosition[] = {0.f,0.f,10.f,1.f};
 	glLightfv(GL_LIGHT0,GL_AMBIENT,LightAmbient);
 	glLightfv(GL_LIGHT0,GL_DIFFUSE,LightDiffuse);
@@ -156,7 +158,10 @@ void Scene::render() {
 
 	// Render geometry/scene here -------------------------------------
 
-	Shape::renderSphere(5.f,100,100,crate);
+	glPushMatrix();
+		glRotatef(earthAngle,0.f,1.f,0.f);
+		Shape::renderSphere(5.f,100,100,crate);
+	glPopMatrix();
 
 	// End render geometry --------------------------------------
 
@@ -233,9 +238,11 @@ void Scene::renderTextOutput()
 	glDisable(GL_LIGHTING);
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
 	sprintf_s(pos, "Pos: {%f,%f,%f}", cam.getPosition().x,cam.getPosition().y,cam.getPosition().z);
+	sprintf_s(camRotationText, "cam pit,yaw: {%f,%f}", cam.getRotation().pitch,cam.getRotation().yaw);
 	displayText(-1.f, 0.96f, 1.f, 1.f, 0.f, mouseText);
 	displayText(-1.f, 0.90f, 1.f, 1.f, 0.f, fps);
-	displayText(-1.f, 0.80f, 1.f, 1.f, 0.f, pos);
+	displayText(-1.f, 0.84f, 1.f, 1.f, 0.f, pos);
+	displayText(-1.f, 0.78f, 1.f, 1.f, 0.f, camRotationText);
 	glEnable(GL_LIGHTING);
 }
 

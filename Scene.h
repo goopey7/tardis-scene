@@ -74,10 +74,11 @@ protected:
 	char fps[40];
 	char mouseText[40];
 	char pos[40];
+	char camRotationText[40];
 
 	bool bIsWireframe = false;
 
-	float angle = 0.f;
+	float earthAngle = 0.f;
 	float strafeSpeed = 10.f;
 	float rotateSpeed = 0.1f;
 
