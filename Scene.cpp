@@ -21,8 +21,8 @@ Scene::Scene(Input *in)
 
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_BLEND);
-	//glEnable(GL_LIGHTING);
-	//glShadeModel(GL_SMOOTH);
+	glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LEQUAL);
@@ -100,13 +100,13 @@ void Scene::handleInput(float dt)
 	}
 
 	// mouse input
-	if(input->getMouseX() != width/2)
+	if(input->getMouseX() != width/2 && !input->isKeyDown('m'))
 	{
 		float mouseDiff = input->getMouseX() - width/2.f;
 		cam.rotate({0.f,rotateSpeed*mouseDiff,0.f});
 		cam.updateRotation();
 	}
-	if(input->getMouseY() != height/2)
+	if(input->getMouseY() != height/2 && !input->isKeyDown('m'))
 	{
 		float mouseDiff = input->getMouseY() - height/2.f;
 		cam.rotate({mouseDiff*rotateSpeed,0.f,0.f});
@@ -124,9 +124,12 @@ void Scene::update(float dt)
 	calculateFPS();
 
 	// Move mouse to center
-	glutWarpPointer(width/2,height/2);
+	if(!input->isKeyDown('m'))
+	{
+		glutWarpPointer(width/2,height/2);
+	}
 
-	//earthAngle+=dt*10.f;
+	earthAngle+=dt*10.f;
 }
 
 void Scene::render() {
@@ -246,7 +249,7 @@ void Scene::renderTextOutput()
 	displayText(-1.f, 0.90f, 1.f, 1.f, 0.f, fps);
 	displayText(-1.f, 0.84f, 1.f, 1.f, 0.f, pos);
 	displayText(-1.f, 0.78f, 1.f, 1.f, 0.f, camRotationText);
-	//glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 }
 
 // Renders text to screen. Must be called last in render function (before swap buffers)
