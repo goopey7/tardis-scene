@@ -19,7 +19,8 @@ Scene::Scene(Input *in)
 
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_BLEND);
-	//glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LEQUAL);
@@ -141,9 +142,20 @@ void Scene::render() {
 
 	skybox.render();
 
+	glPushMatrix();
+	glRotatef(angle,0.f,1.f,0.f);
+	glTranslatef(1.f,0.f,0.f);
+	GLfloat LightAmbient[] = {0.1f,0.0f,0.3f,1.f};
+	GLfloat LightDiffuse[] = {1.f,1.f,1.f,1.f};
+	GLfloat LightPosition[] = {0.f,0.f,10.f,1.f};
+	glLightfv(GL_LIGHT0,GL_AMBIENT,LightAmbient);
+	glLightfv(GL_LIGHT0,GL_DIFFUSE,LightDiffuse);
+	glLightfv(GL_LIGHT0,GL_POSITION,LightPosition);
+	glEnable(GL_LIGHT0);
+	glPopMatrix();
+
 	// Render geometry/scene here -------------------------------------
 
-	//Shape::renderDisc(111500, 5.f,crate);
 	Shape::renderSphere(5.f,100,100,crate);
 
 	// End render geometry --------------------------------------
@@ -218,11 +230,13 @@ void Scene::calculateFPS()
 void Scene::renderTextOutput()
 {
 	// Render current mouse position and frames per second.
+	glDisable(GL_LIGHTING);
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
 	sprintf_s(pos, "Pos: {%f,%f,%f}", cam.getPosition().x,cam.getPosition().y,cam.getPosition().z);
-	displayText(-1.f, 0.96f, 1.f, 0.f, 0.f, mouseText);
-	displayText(-1.f, 0.90f, 1.f, 0.f, 0.f, fps);
-	displayText(-1.f, 0.80f, 1.f, 0.f, 0.f, pos);
+	displayText(-1.f, 0.96f, 1.f, 1.f, 0.f, mouseText);
+	displayText(-1.f, 0.90f, 1.f, 1.f, 0.f, fps);
+	displayText(-1.f, 0.80f, 1.f, 1.f, 0.f, pos);
+	glEnable(GL_LIGHTING);
 }
 
 // Renders text to screen. Must be called last in render function (before swap buffers)

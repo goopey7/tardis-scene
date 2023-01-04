@@ -7,7 +7,7 @@
 Skybox::Skybox(const Camera& cam)
 	: cam(cam),
 	skyTexture(SOIL_load_OGL_texture(
-				"gfx/markedSky.png",
+				"gfx/stars.png",
 				SOIL_LOAD_AUTO,
 				SOIL_CREATE_NEW_ID,
 				SOIL_FLAG_MIPMAPS|SOIL_FLAG_NTSC_SAFE_RGB|SOIL_FLAG_COMPRESS_TO_DXT
@@ -19,6 +19,7 @@ Skybox::Skybox(const Camera& cam)
 void Skybox::render()
 {
 	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
 	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -30,6 +31,7 @@ void Skybox::render()
 		glEnable(GL_DEPTH_TEST);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
 }
 
 void Skybox::renderGeometry()
@@ -53,7 +55,7 @@ void Skybox::renderGeometry()
 		glVertex3f(0.5f, 0.5f, 0.5f);
 
 		// right face
-		glTexCoord2f(0.5f,0.26f);
+		glTexCoord2f(0.5f,0.25f);
 		glVertex3f(0.5f, 0.5f, 0.5f);
 
 		glTexCoord2f(0.5f,0.5f);
@@ -62,7 +64,7 @@ void Skybox::renderGeometry()
 		glTexCoord2f(0.75f,0.5f);
 		glVertex3f(0.5f, -0.5f, -0.5f);
 
-		glTexCoord2f(0.75f,0.26f);
+		glTexCoord2f(0.75f,0.25f);
 		glVertex3f(0.5f, 0.5f, -0.5f);
 
 		//bottom face
@@ -92,7 +94,7 @@ void Skybox::renderGeometry()
 		glVertex3f(0.5f, 0.48f, -0.5f);
 
 		// left face
-		glTexCoord2f(0.f,0.26f);
+		glTexCoord2f(0.f,0.25f);
 		glVertex3f(-0.5f, 0.5f, -0.5f);
 
 		glTexCoord2f(0.f,0.5f);
@@ -101,11 +103,11 @@ void Skybox::renderGeometry()
 		glTexCoord2f(0.25f,0.5f);
 		glVertex3f(-0.5f, -0.5f, 0.5f);
 
-		glTexCoord2f(0.25f,0.26f);
+		glTexCoord2f(0.25f,0.25f);
 		glVertex3f(-0.5f, 0.5f, 0.5f);
 
 		// back face
-		glTexCoord2f(0.75f,0.26f);
+		glTexCoord2f(0.75f,0.25f);
 		glVertex3f(0.5f, 0.5f, -0.5f);
 
 		glTexCoord2f(0.75f,0.5f);
@@ -114,7 +116,7 @@ void Skybox::renderGeometry()
 		glTexCoord2f(1.f,0.5f);
 		glVertex3f(-0.5f, -0.5f, -0.5f);
 
-		glTexCoord2f(1.f,0.26f);
+		glTexCoord2f(1.f,0.25f);
 		glVertex3f(-0.5f, 0.5f, -0.5f);
 
 	glEnd();

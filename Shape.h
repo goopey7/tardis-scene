@@ -10,17 +10,6 @@
 class Shape
 {
 public:
-	void render1();
-	void render2();
-	void render3();
-
-	static void renderDisc(unsigned long res, float radius, GLuint discTexture);
 	static void renderSphere(float radius, unsigned long numLat, unsigned long numLong, GLuint texture);
-
-	Shape();
-
-	float* verts;
-	float* norms;
-	float* texcoords;
 };
 #endif 
