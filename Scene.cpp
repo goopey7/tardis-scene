@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Model.h"
 #include "PointLight.h"
 #include <GL/freeglut_std.h>
 #include <GL/gl.h>
@@ -20,8 +21,8 @@ Scene::Scene(Input *in)
 
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(GL_BLEND);
-	glEnable(GL_LIGHTING);
-	glShadeModel(GL_SMOOTH);
+	//glEnable(GL_LIGHTING);
+	//glShadeModel(GL_SMOOTH);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LEQUAL);
@@ -29,8 +30,15 @@ Scene::Scene(Input *in)
 
 	// Initialise scene variables
 
-	crate = SOIL_load_OGL_texture(
+	earth = SOIL_load_OGL_texture(
 				"gfx/earth.jpg",
+				SOIL_LOAD_AUTO,
+				SOIL_CREATE_NEW_ID,
+				SOIL_FLAG_MIPMAPS|SOIL_FLAG_NTSC_SAFE_RGB|SOIL_FLAG_COMPRESS_TO_DXT
+				);
+
+	crate = SOIL_load_OGL_texture(
+				"gfx/crate.png",
 				SOIL_LOAD_AUTO,
 				SOIL_CREATE_NEW_ID,
 				SOIL_FLAG_MIPMAPS|SOIL_FLAG_NTSC_SAFE_RGB|SOIL_FLAG_COMPRESS_TO_DXT
@@ -45,6 +53,8 @@ Scene::Scene(Input *in)
 				*/
 
 	sunLight.setDiffuse({1.f,0.7f,0.2f,1.f});
+
+	teapot.load("models/teapot.obj","gfx/crate.png");
 	
 }
 
@@ -116,7 +126,7 @@ void Scene::update(float dt)
 	// Move mouse to center
 	glutWarpPointer(width/2,height/2);
 
-	earthAngle+=dt*10.f;
+	//earthAngle+=dt*10.f;
 }
 
 void Scene::render() {
@@ -152,7 +162,8 @@ void Scene::render() {
 
 	glPushMatrix();
 		glRotatef(earthAngle,0.f,1.f,0.f);
-		Sphere::render(5.f,100,100,crate);
+		//Sphere::render(5.f,100,100,earth);
+		teapot.render();
 	glPopMatrix();
 
 	// End render geometry --------------------------------------
@@ -235,7 +246,7 @@ void Scene::renderTextOutput()
 	displayText(-1.f, 0.90f, 1.f, 1.f, 0.f, fps);
 	displayText(-1.f, 0.84f, 1.f, 1.f, 0.f, pos);
 	displayText(-1.f, 0.78f, 1.f, 1.f, 0.f, camRotationText);
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 }
 
 // Renders text to screen. Must be called last in render function (before swap buffers)

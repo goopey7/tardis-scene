@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include "Camera.h"
+#include "Model.h"
 #include "PointLight.h"
 #include "Sphere.h"
 #include "Skybox.h"
@@ -85,8 +86,10 @@ protected:
 
 	Camera cam;
 	Skybox skybox;
+	Model teapot;
 
 	//GLuint dice;
+	GLuint earth;
 	GLuint crate;
 
 	PointLight sunLight;

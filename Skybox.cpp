@@ -31,7 +31,7 @@ void Skybox::render()
 		glEnable(GL_DEPTH_TEST);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHTING);
 }
 
 void Skybox::renderGeometry()
