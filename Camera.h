@@ -41,6 +41,7 @@ class Camera
 		const Vector3& getUpVector() const;
 		const Vector3& getRightVector() const;
 		const Vector3 getLookAtVector() const;
+		const Rotation& getRotation() const;
 
 	private:
 		Vector3 pos;

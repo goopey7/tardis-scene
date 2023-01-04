@@ -1,6 +1,7 @@
 //Sam Collier 2022
 
 #include "Camera.h"
+#include <algorithm>
 
 
 Camera::Camera()
@@ -49,6 +50,7 @@ void Camera::translate(const Vector3& translation)
 void Camera::rotate(const Rotation& rotation)
 {
 	this->rotation += rotation;
+	this->rotation.pitch = std::clamp(this->rotation.pitch, -269.0f, -89.0f);
 }
 
 void Camera::setPosition(const Vector3& newPosition)
@@ -85,5 +87,10 @@ void Camera::updateRotation()
 const Vector3 Camera::getLookAtVector() const
 {
 	return getPosition() + getForwardVector();
+}
+
+const Rotation& Camera::getRotation() const
+{
+	return rotation;
 }
 
