@@ -167,7 +167,8 @@ void Scene::render() {
 	glPushMatrix();
 		glPushMatrix();
 			glRotatef(earthAngle,0.f,1.f,0.f);
-			Sphere::render(5.f,100,100,earth);
+			Sphere sphere(5.f,100,100,earth);
+			sphere.render();
 		glPopMatrix();
 		glPushMatrix();
 			glRotatef(spaceshipAngle,0.f,1.f,0.f);
