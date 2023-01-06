@@ -1,19 +1,15 @@
 #include "Sphere.h"
 #include <GL/gl.h>
 #include <cmath>
+#include <fstream>
 
-Sphere::Sphere(float radius, unsigned long numLat, unsigned long numLong, GLuint texture)
-	: texture(texture)
+Sphere::Sphere(float radius, unsigned long numLat, unsigned long numLong, const std::string& textureFile)
 {
-	// TODO Don't regenerate the sphere every frame
-	vertex.resize(numLat * numLong * 3);
+	loadTexture(textureFile.c_str());
 	float theta = 2*PI/numLat;
 	float delta = PI/numLong;
-	float verts[numLat+1][numLong+1][3];
-	//GLint texCoords[numLat+1][numLong+1][2];
 	for(int lats = 0; lats < numLat; lats++)
 	{
-		glVertexPointer(3,GL_FLOAT,0,verts[lats]);
 		for(int longs = 0; longs < numLong; longs++)
 		{
 
@@ -21,66 +17,51 @@ Sphere::Sphere(float radius, unsigned long numLat, unsigned long numLong, GLuint
 			int nextLong = longs+1;
 
 			// [lats][longs]
-			verts[lats][longs][0]= radius * std::cos(lats*theta) * std::sin(longs*delta); //x
-			verts[lats][longs][1]= radius * std::cos(longs*delta); //y
-			verts[lats][longs][2]= radius * std::sin(lats*theta) * std::sin(longs*delta); //z
+			vertex.push_back( radius * std::cos(lats*theta) * std::sin(longs*delta)); //x
+			vertex.push_back( radius * std::cos(longs*delta)); //y
+			vertex.push_back( radius * std::sin(lats*theta) * std::sin(longs*delta)); //z
+
+			normals.push_back( std::cos(lats*theta) * std::sin(longs*delta)); //x
+			normals.push_back( std::cos(longs*delta)); //y
+			normals.push_back( std::sin(lats*theta) * std::sin(longs*delta)); //z
 
 			// [lats][nextLong]
-			verts[lats][nextLong][0]= radius * std::cos(lats*theta) * std::sin(nextLong*delta); //x
-			verts[lats][nextLong][1]= radius * std::cos(nextLong*delta); //y
-			verts[lats][nextLong][2]= radius * std::sin(lats*theta) * std::sin(nextLong*delta); //z
+			vertex.push_back( radius * std::cos(lats*theta) * std::sin(nextLong*delta)); //x
+			vertex.push_back( radius * std::cos(nextLong*delta)); //y
+			vertex.push_back( radius * std::sin(lats*theta) * std::sin(nextLong*delta)); //z
+
+			normals.push_back( std::cos(lats*theta) * std::sin(nextLong*delta)); //x
+			normals.push_back( std::cos(nextLong*delta)); //y
+			normals.push_back( std::sin(lats*theta) * std::sin(nextLong*delta)); //z
 
 			// [nextLat][nextLong]
-			verts[nextLat][nextLong][0]= radius * std::cos((nextLat)*theta) * std::sin((nextLong)*delta); //x
-			verts[nextLat][nextLong][1]= radius * std::cos((nextLong)*delta); //y
-			verts[nextLat][nextLong][2]= radius * std::sin((nextLat)*theta) * std::sin((nextLong)*delta); //z
+			vertex.push_back( radius * std::cos((nextLat)*theta) * std::sin((nextLong)*delta)); //x
+			vertex.push_back( radius * std::cos((nextLong)*delta)); //y
+			vertex.push_back( radius * std::sin((nextLat)*theta) * std::sin((nextLong)*delta)); //z
+
+			normals.push_back( std::cos((nextLat)*theta) * std::sin((nextLong)*delta)); //x
+			normals.push_back( std::cos((nextLong)*delta)); //y
+			normals.push_back( std::sin((nextLat)*theta) * std::sin((nextLong)*delta)); //z
 
 			// [nextLat][longs]
-			verts[nextLat][longs][0]= radius * std::cos((nextLat)*theta) * std::sin(longs*delta); //x
-			verts[nextLat][longs][1]= radius * std::cos(longs*delta); //y
-			verts[nextLat][longs][2]= radius * std::sin((nextLat)*theta) * std::sin(longs*delta); //z
+			vertex.push_back( radius * std::cos((nextLat)*theta) * std::sin(longs*delta)); //x
+			vertex.push_back( radius * std::cos(longs*delta)); //y
+			vertex.push_back( radius * std::sin((nextLat)*theta) * std::sin(longs*delta)); //z
 
-			// push to vertex and normal vectors
-			// [lats][longs]
-			vertex.push_back(verts[lats][longs][0]);
-			vertex.push_back(verts[lats][longs][1]);
-			vertex.push_back(verts[lats][longs][2]);
-
-			normals.push_back(verts[lats][longs][0] / radius);
-			normals.push_back(verts[lats][longs][1] / radius);
-			normals.push_back(verts[lats][longs][2] / radius);
-
-			// [lats][nextLong]
-			vertex.push_back(verts[lats][nextLong][0]);
-			vertex.push_back(verts[lats][nextLong][1]);
-			vertex.push_back(verts[lats][nextLong][2]);
-
-			normals.push_back(verts[lats][nextLong][0] / radius);
-			normals.push_back(verts[lats][nextLong][1] / radius);
-			normals.push_back(verts[lats][nextLong][2] / radius);
-
-			// [nextLat][nextLong]
-			vertex.push_back(verts[nextLat][nextLong][0]);
-			vertex.push_back(verts[nextLat][nextLong][1]);
-			vertex.push_back(verts[nextLat][nextLong][2]);
-
-			normals.push_back(verts[nextLat][nextLong][0] / radius);
-			normals.push_back(verts[nextLat][nextLong][1] / radius);
-			normals.push_back(verts[nextLat][nextLong][2] / radius);
-
-			// [nextLat][longs]
-			vertex.push_back(verts[nextLat][longs][0]);
-			vertex.push_back(verts[nextLat][longs][1]);
-			vertex.push_back(verts[nextLat][longs][2]);
-
-			normals.push_back(verts[nextLat][longs][0] / radius);
-			normals.push_back(verts[nextLat][longs][1] / radius);
-			normals.push_back(verts[nextLat][longs][2] / radius);
+			normals.push_back( std::cos((nextLat)*theta) * std::sin(longs*delta)); //x
+			normals.push_back( std::cos(longs*delta)); //y
+			normals.push_back( std::sin((nextLat)*theta) * std::sin(longs*delta)); //z
 
 			float u = (float)(numLat-(lats-1))/(numLat+1);
-			float v = (float)(longs)/(numLong+1);
+			float v = (float)((numLong + 1) - longs)/(numLong+1);
 			float u1 = (float)(numLat-lats)/(numLat+1);
-			float v1 = (float)(nextLong)/(numLong+1);
+			float v1 = (float)((numLong+1) - nextLong)/(numLong+1);
+
+			// invert the above block
+			float iu = (float)(lats)/(numLat+1);
+			float iv = (float)(longs)/(numLong+1);
+			float iu1 = (float)(nextLat)/(numLat+1);
+			float iv1 = (float)(nextLong)/(numLong+1);
 
 			// [lats][longs]
 			texCoords.push_back(u);
@@ -97,50 +78,6 @@ Sphere::Sphere(float radius, unsigned long numLat, unsigned long numLong, GLuint
 			// [nextLat][longs]
 			texCoords.push_back(u1);
 			texCoords.push_back(v);
-
-			/*
-			// render
-			glBegin(GL_QUADS);
-
-				float u = (float)(numLat-(lats-1))/(numLat+1);
-				float v = (float)(longs)/(numLong+1);
-				float u1 = (float)(numLat-lats)/(numLat+1);
-				float v1 = (float)(nextLong)/(numLong+1);
-
-				glTexCoord2f(u,v);
-				glNormal3f(
-						verts[lats][longs][0] / radius,
-						verts[lats][longs][1] / radius,
-						verts[lats][longs][2] / radius
-						);
-				glVertex3fv(verts[lats][longs]);
-
-				glTexCoord2f(u,v1);
-				glNormal3f(
-						verts[lats][nextLong][0] / radius,
-						verts[lats][nextLong][1] / radius,
-						verts[lats][nextLong][2] / radius
-						);
-				glVertex3fv(verts[lats][nextLong]);
-
-				glTexCoord2f(u1,v1);
-				glNormal3f(
-						verts[nextLat][nextLong][0] / radius,
-						verts[nextLat][nextLong][1] / radius,
-						verts[nextLat][nextLong][2] / radius
-						);
-				glVertex3fv(verts[nextLat][nextLong]);
-
-				glTexCoord2f(u1,v);
-				glNormal3f(
-						verts[nextLat][longs][0] / radius,
-						verts[nextLat][longs][1] / radius,
-						verts[nextLat][longs][2] / radius
-						);
-				glVertex3fv(verts[nextLat][longs]);
-
-			glEnd();
-			*/
 		}
 	}
 }
@@ -150,6 +87,8 @@ void Sphere::render()
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D,texture);
+
+	glDisable(GL_LIGHTING);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -162,12 +101,30 @@ void Sphere::render()
 	glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
 	glNormalPointer(GL_FLOAT, 0, &normals[0]);
 	
-	glDrawArrays(GL_QUADS, 0, vertex.size()/4);
+	glDrawArrays(GL_QUADS, 0, vertex.size()/3);
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 
 	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+}
+
+void Sphere::loadTexture(const char* filename)
+{
+	texture = SOIL_load_OGL_texture
+	(
+		filename,
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y // Depending on texture file type some need inverted others don't.
+	);
+
+	//check for an error during the load process
+	if (texture == 0)
+	{
+		std::printf("SOIL loading error: '%s'\n", SOIL_last_result());
+	}
 }
 
