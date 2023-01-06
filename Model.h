@@ -5,6 +5,7 @@
 #define _MODEL_H_
 
 // INCLUDES //
+#include "Geometry.h"
 #include <GL/freeglut.h>
 #include <fstream>
 #include <GL/gl.h>
@@ -17,13 +18,13 @@ using namespace std;
 #include "Vector3.h"
 #include <SOIL/SOIL.h>
 
-class Model
+class Model : public Geometry
 {
 
 public:
 
 	bool load(const std::string& modelFilename, const std::string& textureFilename);
-	void render();
+	void render() override;
 
 private:
 

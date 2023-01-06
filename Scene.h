@@ -19,7 +19,7 @@
 
 #include "Camera.h"
 #include "Model.h"
-#include "PointLight.h"
+#include "PointLightGeo.h"
 #include "Sphere.h"
 #include "Skybox.h"
 
@@ -81,6 +81,7 @@ protected:
 	bool bIsWireframe = false;
 
 	float earthAngle = 0.f;
+	float earthSunRotation = 0.f;
 	float spaceshipAngle = 0.f;
 	float strafeSpeed = 10.f;
 	float rotateSpeed = 0.1f;
@@ -90,10 +91,11 @@ protected:
 	Model spaceship;
 
 	//GLuint dice;
-	GLuint earth;
+	std::unique_ptr<Sphere> earth;
+	std::unique_ptr<Sphere> sunSphere;
 	GLuint crate;
 
-	PointLight sunLight;
+	PointLightGeo sun;
 };
 
 #endif

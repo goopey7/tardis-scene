@@ -57,12 +57,6 @@ Sphere::Sphere(float radius, unsigned long numLat, unsigned long numLong, const 
 			float u1 = (float)(numLat-lats)/(numLat+1);
 			float v1 = (float)((numLong+1) - nextLong)/(numLong+1);
 
-			// invert the above block
-			float iu = (float)(lats)/(numLat+1);
-			float iv = (float)(longs)/(numLong+1);
-			float iu1 = (float)(nextLat)/(numLat+1);
-			float iv1 = (float)(nextLong)/(numLong+1);
-
 			// [lats][longs]
 			texCoords.push_back(u);
 			texCoords.push_back(v);
@@ -88,8 +82,6 @@ void Sphere::render()
 	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D,texture);
 
-	glDisable(GL_LIGHTING);
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
@@ -108,7 +100,6 @@ void Sphere::render()
 	glDisableClientState(GL_NORMAL_ARRAY);
 
 	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_LIGHTING);
 }
 
 void Sphere::loadTexture(const char* filename)

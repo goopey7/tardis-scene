@@ -7,7 +7,9 @@
 // Scene constructor, initilises OpenGL
 // You should add further variables to need initilised.
 Scene::Scene(Input *in)
-	: skybox(cam)
+	: skybox(cam), earth(new Sphere(5.f,100,100,"gfx/earth.jpg"))
+	  , sunSphere(new Sphere(5.f,100,100,"gfx/sun.jpeg"))
+	  , sun(std::move(sunSphere))
 {
 	// Store pointer for input class
 	input = in;
@@ -30,31 +32,16 @@ Scene::Scene(Input *in)
 
 	// Initialise scene variables
 
-	earth = SOIL_load_OGL_texture(
-				"gfx/earth.jpg",
-				SOIL_LOAD_AUTO,
-				SOIL_CREATE_NEW_ID,
-				SOIL_FLAG_MIPMAPS|SOIL_FLAG_NTSC_SAFE_RGB|SOIL_FLAG_COMPRESS_TO_DXT
-				);
-
 	crate = SOIL_load_OGL_texture(
 				"gfx/crate.png",
 				SOIL_LOAD_AUTO,
 				SOIL_CREATE_NEW_ID,
 				SOIL_FLAG_MIPMAPS|SOIL_FLAG_NTSC_SAFE_RGB|SOIL_FLAG_COMPRESS_TO_DXT
 				);
-	/*
-	dice = SOIL_load_OGL_texture(
-				"gfx/diceTexture.png",
-				SOIL_LOAD_AUTO,
-				SOIL_CREATE_NEW_ID,
-				SOIL_FLAG_MIPMAPS|SOIL_FLAG_NTSC_SAFE_RGB|SOIL_FLAG_COMPRESS_TO_DXT
-				);
-				*/
-
-	sunLight.setDiffuse({1.f,0.7f,0.2f,1.f});
 
 	spaceship.load("models/spaceship.obj","models/spaceship.jpg");
+
+	sun.setAmbient({0.6f,0.6f,0.6f,1.f});
 	
 }
 
@@ -131,6 +118,7 @@ void Scene::update(float dt)
 
 	earthAngle+=dt*10.f;
 	spaceshipAngle+=dt*60.f;
+	earthSunRotation+=dt;
 }
 
 void Scene::render() {
@@ -160,19 +148,19 @@ void Scene::render() {
 	}
 
 	skybox.render();
-	sunLight.render();
 
 	// Render geometry/scene here -------------------------------------
 
 	glPushMatrix();
+		sun.render();
 		glPushMatrix();
+			glRotatef(earthSunRotation,0.f,1.f,0.f);
+			glTranslatef(0.f,0.f,-20.f);
 			glRotatef(earthAngle,0.f,1.f,0.f);
-			Sphere sphere(5.f,100,100,earth);
-			sphere.render();
-		glPopMatrix();
-		glPushMatrix();
+			earth->render();
 			glRotatef(spaceshipAngle,0.f,1.f,0.f);
-			glTranslatef(0.f,0.f,11.f);
+			glTranslatef(0.f,0.f,7.f);
+			glRotatef(90.f,0.f,1.f,0.f);
 			spaceship.render();
 		glPopMatrix();
 	glPopMatrix();

@@ -16,7 +16,7 @@ PointLight::PointLight(Vector3 position, unsigned int lightID)
 {
 		ambient = {0.f,0.f,0.f,1.f};
 		diffuse = {1.f,1.f,1.f,1.f};
-		lightPosition = {0.f,0.f,10.f,1.f};
+		lightPosition = {0.f,0.f,0.f,1.f};
 }
 
 void PointLight::setAmbient(std::vector<GLfloat> ambient)
