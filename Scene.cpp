@@ -10,6 +10,8 @@ Scene::Scene(Input *in)
 	: skybox(cam), earth(new Sphere(5.f,100,100,"gfx/earth.jpg"))
 	  , sunSphere(new Sphere(5.f,100,100,"gfx/sun.jpeg"))
 	  , sun(std::move(sunSphere))
+	  , teapot(new Model())
+	  , teapotWithReflection(std::move(teapot))
 {
 	// Store pointer for input class
 	input = in;
@@ -40,6 +42,8 @@ Scene::Scene(Input *in)
 				);
 
 	spaceship.load("models/spaceship.obj","models/spaceship.jpg");
+
+	teapotWithReflection.load("models/teapot.obj", "gfx/crate.png");
 
 	sun.setAmbient({0.6f,0.6f,0.6f,1.f});
 	
@@ -119,12 +123,14 @@ void Scene::update(float dt)
 	earthAngle+=dt*10.f;
 	spaceshipAngle+=dt*60.f;
 	earthSunRotation+=dt;
+	teapotWithReflection.update(dt);
 }
 
-void Scene::render() {
+void Scene::render()
+{
 
-	// Clear Color and Depth Buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	// Clear Color, Depth and Stencil Buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// Reset transformations
 	glLoadIdentity();
@@ -152,17 +158,18 @@ void Scene::render() {
 	// Render geometry/scene here -------------------------------------
 
 	glPushMatrix();
-		sun.render();
-		glPushMatrix();
-			glRotatef(earthSunRotation,0.f,1.f,0.f);
-			glTranslatef(0.f,0.f,-20.f);
-			glRotatef(earthAngle,0.f,1.f,0.f);
-			earth->render();
-			glRotatef(spaceshipAngle,0.f,1.f,0.f);
-			glTranslatef(0.f,0.f,7.f);
-			glRotatef(90.f,0.f,1.f,0.f);
-			spaceship.render();
-		glPopMatrix();
+		//sun.render();
+
+		teapotWithReflection.render();
+		//glRotatef(earthSunRotation,0.f,1.f,0.f);
+		//glTranslatef(0.f,0.f,-20.f);
+		//glRotatef(earthAngle,0.f,1.f,0.f);
+		//earth->render();
+
+		//glRotatef(spaceshipAngle,0.f,1.f,0.f);
+		//glTranslatef(0.f,0.f,7.f);
+		//glRotatef(90.f,0.f,1.f,0.f);
+		//spaceship.render();
 	glPopMatrix();
 
 	// End render geometry --------------------------------------

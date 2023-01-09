@@ -1,6 +1,7 @@
 //Copyright Sam Collier 2022
 #pragma once
 
+#include <string>
 
 class Geometry
 {
@@ -8,7 +9,9 @@ class Geometry
 		Geometry(const Geometry&) = delete;
 		Geometry& operator=(const Geometry&) = delete;
 		Geometry() = default;
-		virtual void render() = 0;
+		virtual void render() {};
+		virtual void load() {}
+		virtual bool load(const std::string& modelFilename, const std::string& textureFilename) {return true;}
 	protected:
 	private:
 };

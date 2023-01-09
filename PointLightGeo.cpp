@@ -18,3 +18,13 @@ void PointLightGeo::render()
 	glEnable(GL_LIGHTING);
 }
 
+void PointLightGeo::load()
+{
+	geometry->load();
+}
+
+bool PointLightGeo::load(const std::string& modelFilename, const std::string& textureFilename)
+{
+	return geometry->load(modelFilename,textureFilename);
+}
+

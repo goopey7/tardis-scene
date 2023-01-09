@@ -23,8 +23,8 @@ class Model : public Geometry
 
 public:
 
-	bool load(const std::string& modelFilename, const std::string& textureFilename);
-	void render() override;
+	bool load(const std::string& modelFilename, const std::string& textureFilename) override;
+	virtual void render() override;
 
 private:
 

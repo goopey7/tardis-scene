@@ -4,8 +4,56 @@
 #include <fstream>
 
 Sphere::Sphere(float radius, unsigned long numLat, unsigned long numLong, const std::string& textureFile)
+	: radius(radius), numLat(numLat), numLong(numLong)
 {
 	loadTexture(textureFile.c_str());
+}
+
+void Sphere::render()
+{
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D,texture);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
+	glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
+	glNormalPointer(GL_FLOAT, 0, &normals[0]);
+	
+	glDrawArrays(GL_QUADS, 0, vertex.size()/3);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+
+	glDisable(GL_TEXTURE_2D);
+}
+
+void Sphere::loadTexture(const char* filename)
+{
+	texture = SOIL_load_OGL_texture
+	(
+		filename,
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y // Depending on texture file type some need inverted others don't.
+	);
+
+	//check for an error during the load process
+	if (texture == 0)
+	{
+		std::printf("SOIL loading error: '%s'\n", SOIL_last_result());
+	}
+}
+
+void Sphere::load()
+{
 	float theta = 2*PI/numLat;
 	float delta = PI/numLong;
 	for(int lats = 0; lats < numLat; lats++)
@@ -73,49 +121,6 @@ Sphere::Sphere(float radius, unsigned long numLat, unsigned long numLong, const 
 			texCoords.push_back(u1);
 			texCoords.push_back(v);
 		}
-	}
-}
-
-void Sphere::render()
-{
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D,texture);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glVertexPointer(3, GL_FLOAT, 0, &vertex[0]);
-	glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
-	glNormalPointer(GL_FLOAT, 0, &normals[0]);
-	
-	glDrawArrays(GL_QUADS, 0, vertex.size()/3);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-
-	glDisable(GL_TEXTURE_2D);
-}
-
-void Sphere::loadTexture(const char* filename)
-{
-	texture = SOIL_load_OGL_texture
-	(
-		filename,
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y // Depending on texture file type some need inverted others don't.
-	);
-
-	//check for an error during the load process
-	if (texture == 0)
-	{
-		std::printf("SOIL loading error: '%s'\n", SOIL_last_result());
 	}
 }
 

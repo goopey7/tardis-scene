@@ -22,6 +22,7 @@
 #include "PointLightGeo.h"
 #include "Sphere.h"
 #include "Skybox.h"
+#include "GeoWithReflection.h"
 
 #define sprintf_s(buf, ...) snprintf((buf), sizeof(buf), __VA_ARGS__)
 
@@ -96,6 +97,8 @@ protected:
 	GLuint crate;
 
 	PointLightGeo sun;
+	std::unique_ptr<Model> teapot;
+	GeoWithReflection teapotWithReflection;
 };
 
 #endif
