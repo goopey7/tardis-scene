@@ -4,7 +4,7 @@
 #include <SOIL/SOIL.h>
 #include <GL/gl.h>
 
-Skybox::Skybox(const Camera& cam)
+Skybox::Skybox(Camera* cam)
 	: cam(cam),
 	skyTexture(SOIL_load_OGL_texture(
 				"gfx/stars.png",
@@ -23,7 +23,7 @@ void Skybox::render()
 	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	Vector3 pos = cam.getPosition();
+	Vector3 pos = cam->getPosition();
 	glPushMatrix();
 		glDisable(GL_DEPTH_TEST);
 		glTranslatef(pos.x,pos.y,pos.z);
@@ -120,5 +120,10 @@ void Skybox::renderGeometry()
 		glVertex3f(-0.5f, 0.5f, -0.5f);
 
 	glEnd();
+}
+
+void Skybox::updateCamera(Camera* cam)
+{
+	this->cam = cam;
 }
 

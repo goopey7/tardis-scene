@@ -7,16 +7,21 @@
 // Scene constructor, initilises OpenGL
 // You should add further variables to need initilised.
 Scene::Scene(Input *in)
-	: skybox(cam), earth(new Sphere(5.f,100,100,"gfx/earth.jpg"))
+	: skybox(&fpsCam), earth(new Sphere(5.f,100,100,"gfx/earth.jpg"))
 	  , sunSphere(new Sphere(5.f,100,100,"gfx/sun.jpeg"))
 	  , sun(std::move(sunSphere))
 {
 	// Store pointer for input class
 	input = in;
 	initialiseOpenGL();
-	cam.setPosition({0.f,0.f,6.f});
-	cam.setRotation({0.f,0.f,0.f});
-	cam.updateRotation();
+	fpsCam.setPosition({0.f,0.f,6.f});
+	fpsCam.setRotation({0.f,0.f,0.f});
+	fpsCam.updateRotation();
+
+	topDownCam.setPosition({0.f,200.f,0.f});
+	topDownCam.setRotation({-90.f,0.f,0.f});
+	topDownCam.updateRotation();
+
 	glutSetCursor(GLUT_CURSOR_NONE);
 
 	// Other OpenGL / render setting should be applied here.
@@ -45,6 +50,7 @@ Scene::Scene(Input *in)
 	sun.setAmbient({0.6f,0.6f,0.6f,1.f});
 
 	earth->load();
+	currentCam = &fpsCam;
 	
 }
 
@@ -61,46 +67,46 @@ void Scene::handleInput(float dt)
 
 	if(input->isKeyDown('w'))
 	{
-		cam.translate(cam.getForwardVector() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getForwardVector() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('s'))
 	{
-		cam.translate(cam.getForwardVector().getOpposite() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getForwardVector().getOpposite() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('a'))
 	{
-		cam.translate(cam.getRightVector() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getRightVector() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('d'))
 	{
-		cam.translate(cam.getRightVector().getOpposite() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getRightVector().getOpposite() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('e'))
 	{
-		cam.translate(cam.getUpVector().getOpposite() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getUpVector().getOpposite() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('q'))
 	{
-		cam.translate(cam.getUpVector() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getUpVector() * dt * strafeSpeed);
 	}
 
 	// mouse input
 	if(input->getMouseX() != width/2 && !input->isKeyDown('m'))
 	{
 		float mouseDiff = input->getMouseX() - width/2.f;
-		cam.rotate({0.f,rotateSpeed*mouseDiff,0.f});
-		cam.updateRotation();
+		fpsCam.rotate({0.f,rotateSpeed*mouseDiff,0.f});
+		fpsCam.updateRotation();
 	}
 	if(input->getMouseY() != height/2 && !input->isKeyDown('m'))
 	{
 		float mouseDiff = input->getMouseY() - height/2.f;
-		cam.rotate({mouseDiff*rotateSpeed,0.f,0.f});
-		cam.updateRotation();
+		fpsCam.rotate({mouseDiff*rotateSpeed,0.f,0.f});
+		fpsCam.updateRotation();
 	}
 
 	if(input->isKeyDown(' '))
@@ -109,12 +115,31 @@ void Scene::handleInput(float dt)
 		input->setKeyUp(' ');
 	}
 
+	if(input->isKeyDown('1'))
+	{
+		currentCam = &fpsCam;
+		skybox.updateCamera(currentCam);
+		input->setKeyUp('1');
+	}
+	if(input->isKeyDown('2'))
+	{
+		currentCam = &spaceShipCam;
+		skybox.updateCamera(currentCam);
+		input->setKeyUp('2');
+	}
+	if(input->isKeyDown('3'))
+	{
+		currentCam = &topDownCam;
+		skybox.updateCamera(currentCam);
+		input->setKeyUp('3');
+	}
+
 }
 
 void Scene::update(float dt)
 {
 	// update scene related variables.
-	cam.update();
+	fpsCam.update();
 
 	// Calculate FPS for output
 	calculateFPS();
@@ -146,9 +171,9 @@ void Scene::render()
 	glLoadIdentity();
 
 	// Set the camera
-	Vector3 camPos = cam.getPosition();
-	Vector3 camLookAt = cam.getLookAtVector();
-	Vector3 camUp = cam.getUpVector();
+	Vector3 camPos = currentCam->getPosition();
+	Vector3 camLookAt = currentCam->getLookAtVector();
+	Vector3 camUp = currentCam->getUpVector();
 
 	gluLookAt(camPos.x,camPos.y,camPos.z,
 			camLookAt.x,camLookAt.y,camLookAt.z,
@@ -177,14 +202,17 @@ void Scene::render()
 		glPopMatrix();
 		glPushMatrix();
 			glRotatef(earthSunRotation,0.f,1.f,0.f);
-			glTranslatef(30.f,0.f,-50.f);
+			glTranslatef(50.f,0.f,10.f);
 			glRotatef(earthAngle,0.f,1.f,0.f);
 			earth->render();
 
-			glRotatef(-spaceshipAngle,0.f,1.f,0.f);
-			glTranslatef(0.f,0.f,7.f);
-			glRotatef(90.f,0.f,1.f,0.f);
-			spaceship.render();
+			if(currentCam != &spaceShipCam)
+			{
+				glRotatef(-spaceshipAngle,0.f,1.f,0.f);
+				glTranslatef(0.f,0.f,7.f);
+				glRotatef(90.f,0.f,1.f,0.f);
+				spaceship.render();
+			}
 		glPopMatrix();
 	glPopMatrix();
 
@@ -225,7 +253,7 @@ void Scene::resize(int w, int h)
 	float ratio = (float)w / (float)h;
 	fov = 45.0f;
 	nearPlane = 0.1f;
-	farPlane = 100.0f;
+	farPlane = 1000.0f;
 
 	// Use the Projection Matrix
 	glMatrixMode(GL_PROJECTION);
@@ -262,8 +290,8 @@ void Scene::renderTextOutput()
 	// Render current mouse position and frames per second.
 	glDisable(GL_LIGHTING);
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
-	sprintf_s(pos, "Pos: {%f,%f,%f}", cam.getPosition().x,cam.getPosition().y,cam.getPosition().z);
-	sprintf_s(camRotationText, "cam pit,yaw: {%f,%f}", cam.getRotation().pitch,cam.getRotation().yaw);
+	sprintf_s(pos, "Pos: {%f,%f,%f}", fpsCam.getPosition().x,fpsCam.getPosition().y,fpsCam.getPosition().z);
+	sprintf_s(camRotationText, "cam pit,yaw: {%f,%f}", fpsCam.getRotation().pitch,fpsCam.getRotation().yaw);
 	displayText(-1.f, 0.96f, 1.f, 1.f, 0.f, mouseText);
 	displayText(-1.f, 0.90f, 1.f, 1.f, 0.f, fps);
 	displayText(-1.f, 0.84f, 1.f, 1.f, 0.f, pos);

@@ -14,13 +14,14 @@ class Skybox
 	public:
 		Skybox(const Skybox&) = delete;
 		Skybox& operator=(const Skybox&) = delete;
-		Skybox(const Camera& cam);
+		Skybox(Camera* cam);
 		~Skybox() = default;
 
 		void render();
+		void updateCamera(Camera* cam);
 	private:
 		void renderGeometry();
-		const Camera& cam;
+		Camera* cam;
 		GLuint skyTexture;
 };
 

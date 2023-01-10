@@ -94,3 +94,8 @@ const Rotation& Camera::getRotation() const
 	return rotation;
 }
 
+void Camera::setForwardVector(const Vector3& newForwardVector)
+{
+	forward.set(newForwardVector);
+}
+

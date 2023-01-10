@@ -36,6 +36,8 @@ class Camera
 		void setPosition(const Vector3& newPosition);
 		void setRotation(const Rotation& newRotation);
 
+		void setForwardVector(const Vector3& newForwardVector);
+
 		const Vector3& getPosition() const;
 		const Vector3& getForwardVector() const;
 		const Vector3& getUpVector() const;

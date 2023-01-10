@@ -88,7 +88,10 @@ protected:
 	float strafeSpeed = 10.f;
 	float rotateSpeed = 0.1f;
 
-	Camera cam;
+	Camera fpsCam;
+	Camera spaceShipCam;
+	Camera topDownCam;
+	Camera* currentCam;
 	Skybox skybox;
 	Model spaceship;
 
