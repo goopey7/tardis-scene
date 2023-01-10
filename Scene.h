@@ -93,7 +93,7 @@ protected:
 	Camera fpsCam;
 	Camera topDownCam;
 	Camera* currentCam;
-	SkySphere skybox;
+	SkySphere skySphere;
 	Model spaceship;
 
 	//GLuint dice;

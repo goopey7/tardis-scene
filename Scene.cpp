@@ -9,7 +9,7 @@
 // Scene constructor, initilises OpenGL
 // You should add further variables to need initilised.
 Scene::Scene(Input *in)
-	: skybox(&fpsCam),
+	: skySphere(&fpsCam),
 	    mercury(new Sphere(2.f,100,100,"gfx/mercury.jpg")),
 		venus(new Sphere(2.5f,100,100,"gfx/venus.jpg")),
 		earth(new Sphere(5.f,100,100,"gfx/earth.jpg")),
@@ -152,13 +152,13 @@ void Scene::handleInput(float dt)
 	if(input->isKeyDown('1'))
 	{
 		currentCam = &fpsCam;
-		skybox.updateCamera(currentCam);
+		skySphere.updateCamera(currentCam);
 		input->setKeyUp('1');
 	}
 	if(input->isKeyDown('2'))
 	{
 		currentCam = &topDownCam;
-		skybox.updateCamera(currentCam);
+		skySphere.updateCamera(currentCam);
 		input->setKeyUp('2');
 	}
 	if(input->isKeyDown('m'))
@@ -223,7 +223,7 @@ void Scene::render()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
-	skybox.render();
+	skySphere.render();
 
 	// Render geometry/scene here -------------------------------------
 
