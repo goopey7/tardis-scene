@@ -41,7 +41,10 @@ Scene::Scene(Input *in)
 
 	spaceship.load("models/spaceship.obj","models/spaceship.jpg");
 
+	sun.load();
 	sun.setAmbient({0.6f,0.6f,0.6f,1.f});
+
+	earth->load();
 	
 }
 
@@ -100,6 +103,12 @@ void Scene::handleInput(float dt)
 		cam.updateRotation();
 	}
 
+	if(input->isKeyDown(' '))
+	{
+		bIsPaused = !bIsPaused;
+		input->setKeyUp(' ');
+	}
+
 }
 
 void Scene::update(float dt)
@@ -116,11 +125,15 @@ void Scene::update(float dt)
 		glutWarpPointer(width/2,height/2);
 	}
 
-	earthAngle+=dt*10.f;
-	spaceshipAngle+=dt*60.f;
-	earthSunRotation+=dt;
+	if(!bIsPaused)
+	{
+		earthAngle+=dt*10.f;
+		spaceshipAngle+=dt*60.f;
+		earthSunRotation+=dt;
 
-	tardis.update(dt);
+		tardis.update(dt);
+	}
+
 }
 
 void Scene::render()
@@ -155,18 +168,24 @@ void Scene::render()
 	// Render geometry/scene here -------------------------------------
 
 	glPushMatrix();
-		//sun.render();
+		sun.render();
+		glPushMatrix();
+			glScalef(0.25f,0.25f,0.25f);
+			glRotatef(spaceshipAngle,0.f,1.f,0.f);
+			glTranslatef(55.f,0.f,0.f);
+			tardis.render();
+		glPopMatrix();
+		glPushMatrix();
+			glRotatef(earthSunRotation,0.f,1.f,0.f);
+			glTranslatef(30.f,0.f,-50.f);
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			earth->render();
 
-		tardis.render();
-		//glRotatef(earthSunRotation,0.f,1.f,0.f);
-		//glTranslatef(0.f,0.f,-20.f);
-		//glRotatef(earthAngle,0.f,1.f,0.f);
-		//earth->render();
-
-		//glRotatef(spaceshipAngle,0.f,1.f,0.f);
-		//glTranslatef(0.f,0.f,7.f);
-		//glRotatef(90.f,0.f,1.f,0.f);
-		//spaceship.render();
+			glRotatef(-spaceshipAngle,0.f,1.f,0.f);
+			glTranslatef(0.f,0.f,7.f);
+			glRotatef(90.f,0.f,1.f,0.f);
+			spaceship.render();
+		glPopMatrix();
 	glPopMatrix();
 
 	// End render geometry --------------------------------------

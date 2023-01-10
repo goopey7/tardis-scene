@@ -14,11 +14,11 @@ Tardis::Tardis()
 
 void Tardis::render()
 {
+	glRotatef(angle,0.f,1.f,0.f);
 	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_ALWAYS,1,1);
 	glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
-	glDisable(GL_DEPTH_TEST);
 
 	// render tardis stencil
 	glPushMatrix();
@@ -44,16 +44,16 @@ void Tardis::render()
 
 	glColor4f(1.f,1.f,1.f,1.f);
 
-	glDisable(GL_LIGHTING);
+	// render exterior
+	glEnable(GL_LIGHTING);
 	glPushMatrix();
-		//glTranslatef(0.f,10.f,0.f);
 		glRotatef(angle,0.f,1.f,0.f);
 		glRotatef(-90.f,0.f,1.f,0.f);
 		exterior->render();
 	glPopMatrix();
 
 
-	// render interior
+	// render interior and disable depth to render on top of exterior
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	glDisable(GL_LIGHTING);
@@ -65,11 +65,12 @@ void Tardis::render()
 	glPopMatrix();
 	glDisable(GL_STENCIL_TEST);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
 }
 
 
 void Tardis::update(const float dt)
 {
-	angle += 10.f * dt;
+	angle += angleSpeed * dt;
 }
 

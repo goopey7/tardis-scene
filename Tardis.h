@@ -14,6 +14,7 @@ class Tardis : public Geometry
 	private:
 		std::unique_ptr<Model> exterior;
 		std::unique_ptr<Model> interior;
-		float angle;
+		float angle = 0.f;
+		float angleSpeed = 50.f;
 };
 

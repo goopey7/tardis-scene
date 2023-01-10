@@ -100,6 +100,8 @@ protected:
 	PointLightGeo sun;
 	std::unique_ptr<Model> teapot;
 	Tardis tardis;
+
+	bool bIsPaused = false;
 };
 
 #endif
