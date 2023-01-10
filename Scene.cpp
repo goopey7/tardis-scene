@@ -73,6 +73,8 @@ Scene::Scene(Input *in)
 
 	currentCam = &fpsCam;
 	glDisable(GL_LIGHT1);;
+
+	tardis.load();
 	
 }
 
@@ -99,12 +101,12 @@ void Scene::handleInput(float dt)
 
 	if(input->isKeyDown('a'))
 	{
-		fpsCam.translate(fpsCam.getRightVector() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getRightVector().getOpposite() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('d'))
 	{
-		fpsCam.translate(fpsCam.getRightVector().getOpposite() * dt * strafeSpeed);
+		fpsCam.translate(fpsCam.getRightVector() * dt * strafeSpeed);
 	}
 
 	if(input->isKeyDown('e'))
@@ -231,7 +233,6 @@ void Scene::render()
 		{
 			sun.render();
 		}
-
 
 		// mercury
 		glPushMatrix();

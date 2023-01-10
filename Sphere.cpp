@@ -103,10 +103,10 @@ void Sphere::load()
 			normals.push_back( std::cos(longs*delta)); //y
 			normals.push_back( std::sin((nextLat)*theta) * std::sin(longs*delta)); //z
 
-			float u = (float)(numLat-(lats-1))/(numLat+1);
-			float v = (float)((numLong + 1) - longs)/(numLong+1);
-			float u1 = (float)(numLat-lats)/(numLat+1);
-			float v1 = (float)((numLong+1) - nextLong)/(numLong+1);
+			float u = (float)(numLat-(lats-1))/(numLat+1); // lat
+			float v = (float)((numLong + 1) - longs)/(numLong+1); // long
+			float u1 = (float)(numLat-lats)/(numLat+1); // nextLat
+			float v1 = (float)((numLong+1) - nextLong)/(numLong+1); // nextLong
 
 			// [lats][longs]
 			texCoords.push_back(u);

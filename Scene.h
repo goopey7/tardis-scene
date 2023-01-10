@@ -20,6 +20,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "PointLightGeo.h"
+#include "SkySphere.h"
 #include "Sphere.h"
 #include "Skybox.h"
 #include "GeoWithReflection.h"
@@ -92,7 +93,7 @@ protected:
 	Camera fpsCam;
 	Camera topDownCam;
 	Camera* currentCam;
-	Skybox skybox;
+	SkySphere skybox;
 	Model spaceship;
 
 	//GLuint dice;

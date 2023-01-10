@@ -12,6 +12,7 @@ class Tardis : public Geometry
 		Tardis();
 		void render() override;
 		void update(const float dt);
+		void load() override;
 	protected:
 	private:
 		std::unique_ptr<Model> exterior;

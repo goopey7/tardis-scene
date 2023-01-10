@@ -81,7 +81,7 @@ void Camera::updateRotation()
 			cosP * cosR,
 			-sinY * sinR - sinP * cosR * -cosY);
 
-	right.set(forward.cross(up));
+	right.set(up.cross(forward));
 }
 
 const Vector3 Camera::getLookAtVector() const

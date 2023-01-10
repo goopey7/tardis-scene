@@ -10,12 +10,9 @@ Tardis::Tardis()
 	lamp(new Sphere(0.25f,10.f,10.f,"gfx/white.png")),
 	light(std::move(lamp),{0.f,0.f,0.f},GL_LIGHT1)
 {
-	exterior->load("models/TARDIS.obj","gfx/Wood.jpg");
-	interior->load("models/interior/tardis.obj","gfx/crate.png");
 	light.setLightPosition({ 0.f, 5.f, 0.f });
 	light.setAmbient({ 0.2f, 0.2f, 0.2f });
 	light.setDiffuse({dimmer,dimmer,dimmer});
-	light.load();
 }
 
 void Tardis::render()
@@ -92,5 +89,12 @@ void Tardis::update(const float dt)
 
 	dimmer += dimmerSpeed * dt;
 	light.setDiffuse({dimmer,dimmer,dimmer});
+}
+
+void Tardis::load()
+{
+	exterior->load("models/TARDIS.obj","gfx/Wood.jpg");
+	interior->load("models/interior/tardis.obj","gfx/crate.png");
+	light.load();
 }
 

@@ -124,18 +124,8 @@ bool Model::loadModel(const char* filename)
 	// TODO: By this point all model has been read from the file, but is not in the correct order.
 	// You NEED to loop over all the data and sort it into a render ready order/format.
 
-	int numFaces = faces.size() / 9;
-	int faceSize = faces.size();
-
-	int numFaces3 = numFaces * 3;
-
-
 	for(int i = 0; i < faces.size(); i += 9)
 	{
-		int v1v = faces[i];
-		int v1t = faces[i + 1];
-		int v1n = faces[i + 2];
-
 		//v1
 		vertex.push_back(verts[faces[i]-1].x);
 		vertex.push_back(verts[faces[i]-1].y);
@@ -175,11 +165,6 @@ bool Model::loadModel(const char* filename)
 		normals.push_back(norms[faces[i + 8]-1].y);
 		normals.push_back(norms[faces[i + 8]-1].z);
 	}
-
-	int numVerts = vertex.size();
-	int numTexCoords = texCoords.size();
-	int numNormals = normals.size();
-
 
 #pragma endregion unroll_data
 		
