@@ -36,7 +36,7 @@ void GeoWithReflection::render()
 
 	glDisable(GL_STENCIL_TEST);
 	glEnable(GL_BLEND);
-	glColor4f(0.8f,0.8f,1.f,0.8f);
+	glColor4f(0.2f,0.2f,0.2f,0.8f);
 
 	glBegin(GL_QUADS);
 		glVertex3f(-15.f,0.f,-15.f);
@@ -44,6 +44,8 @@ void GeoWithReflection::render()
 		glVertex3f(15.f,0.f,15.f);
 		glVertex3f(15.f,0.f,-15.f);
 	glEnd();
+
+	glColor4f(1.f,1.f,1.f,1.f);
 
 	glDisable(GL_BLEND);
 	glPushMatrix();
@@ -71,5 +73,10 @@ bool GeoWithReflection::load(const std::string& modelFilename, const std::string
 GeoWithReflection::GeoWithReflection(std::unique_ptr<Geometry> geometry)
 	: geometry(std::move(geometry))
 {
+}
+
+bool GeoWithReflection::load(const std::string& modelFilename)
+{
+	return geometry->load(modelFilename);
 }
 

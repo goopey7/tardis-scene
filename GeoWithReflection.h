@@ -12,6 +12,7 @@ class GeoWithReflection : public Geometry
 		void update(const float dt);
 		void load() override;
 		bool load(const std::string& modelFilename, const std::string& textureFilename) override;
+		bool load(const std::string& modelFilename) override;
 	private:
 		float angle = 0.f;
 		float rotationSpeed = 10.f;

@@ -24,6 +24,7 @@ class Model : public Geometry
 public:
 
 	bool load(const std::string& modelFilename, const std::string& textureFilename) override;
+	bool load(const std::string& modelFilename) override;
 	virtual void render() override;
 
 private:

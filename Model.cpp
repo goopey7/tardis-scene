@@ -106,7 +106,7 @@ bool Model::loadModel(const char* filename)
 				if (matches != 9)
 				{
 					// Parser error, or not triangle faces
-					return false;
+					//return false;
 				}
 				
 				for (int i = 0; i < 9; i++)
@@ -210,4 +210,19 @@ void Model::loadTexture(const char* filename)
 
 }
 
+
+bool Model::load(const std::string& modelFilename)
+{
+	bool result;
+
+	// Load in the model data,
+	glColor4f(0.5f,0.5f,0.5f,1.f);
+	result = loadModel(modelFilename.c_str());
+	if (!result)
+	{
+		//MessageBox(NULL, "Model failed to load", "Error", MB_OK);
+		return false;
+	}
+	return true;
+}
 
