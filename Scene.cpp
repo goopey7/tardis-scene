@@ -118,13 +118,13 @@ void Scene::handleInput(float dt)
 	}
 
 	// mouse input
-	if(input->getMouseX() != width/2 && !input->isKeyDown('m'))
+	if(input->getMouseX() != width/2 && bCaptureMouse)
 	{
 		float mouseDiff = input->getMouseX() - width/2.f;
 		fpsCam.rotate({0.f,rotateSpeed*mouseDiff,0.f});
 		fpsCam.updateRotation();
 	}
-	if(input->getMouseY() != height/2 && !input->isKeyDown('m'))
+	if(input->getMouseY() != height/2 && bCaptureMouse)
 	{
 		float mouseDiff = input->getMouseY() - height/2.f;
 		fpsCam.rotate({mouseDiff*rotateSpeed,0.f,0.f});
@@ -159,6 +159,10 @@ void Scene::handleInput(float dt)
 		skybox.updateCamera(currentCam);
 		input->setKeyUp('2');
 	}
+	if(input->isKeyDown('m'))
+	{
+		bCaptureMouse = !bCaptureMouse;
+	}
 
 }
 
@@ -171,7 +175,7 @@ void Scene::update(float dt)
 	calculateFPS();
 
 	// Move mouse to center
-	if(!input->isKeyDown('m'))
+	if(bCaptureMouse)
 	{
 		glutWarpPointer(width/2,height/2);
 	}

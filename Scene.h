@@ -114,6 +114,7 @@ protected:
 
 	bool bIsPaused = false;
 	bool bEnableSun = true;
+	bool bCaptureMouse = true;
 };
 
 #endif
