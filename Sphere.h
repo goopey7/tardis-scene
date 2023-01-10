@@ -15,7 +15,7 @@
 class Sphere : public Geometry
 {
 public:
-	Sphere(float radius, unsigned long numLat, unsigned long numLong, const std::string& textureFile);
+	Sphere(float radius, unsigned long numLat, unsigned long numLong, const std::string& textureFile = nullptr);
 	void load() override;
 	void render() override;
 private:

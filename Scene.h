@@ -78,6 +78,7 @@ protected:
 	char fps[40];
 	char mouseText[40];
 	char pos[40];
+	char spa[40];
 	char camRotationText[40];
 
 	bool bIsWireframe = false;
@@ -89,14 +90,21 @@ protected:
 	float rotateSpeed = 0.1f;
 
 	Camera fpsCam;
-	Camera spaceShipCam;
 	Camera topDownCam;
 	Camera* currentCam;
 	Skybox skybox;
 	Model spaceship;
 
 	//GLuint dice;
+	std::unique_ptr<Sphere> mercury;
+	std::unique_ptr<Sphere> venus;
 	std::unique_ptr<Sphere> earth;
+	std::unique_ptr<Sphere> moon;
+	std::unique_ptr<Sphere> mars;
+	std::unique_ptr<Sphere> jupiter;
+	std::unique_ptr<Sphere> saturn;
+	std::unique_ptr<Sphere> uranus;
+	std::unique_ptr<Sphere> neptune;
 	std::unique_ptr<Sphere> sunSphere;
 	GLuint crate;
 
@@ -105,6 +113,7 @@ protected:
 	Tardis tardis;
 
 	bool bIsPaused = false;
+	bool bEnableSun = true;
 };
 
 #endif

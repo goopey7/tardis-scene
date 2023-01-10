@@ -1,15 +1,26 @@
 #include "Scene.h"
 #include "Model.h"
 #include "PointLight.h"
+#include "Sphere.h"
 #include <GL/freeglut_std.h>
 #include <GL/gl.h>
+#include <GL/glu.h>
 
 // Scene constructor, initilises OpenGL
 // You should add further variables to need initilised.
 Scene::Scene(Input *in)
-	: skybox(&fpsCam), earth(new Sphere(5.f,100,100,"gfx/earth.jpg"))
-	  , sunSphere(new Sphere(5.f,100,100,"gfx/sun.jpeg"))
-	  , sun(std::move(sunSphere))
+	: skybox(&fpsCam),
+	    mercury(new Sphere(2.f,100,100,"gfx/mercury.jpg")),
+		venus(new Sphere(2.5f,100,100,"gfx/venus.jpg")),
+		earth(new Sphere(5.f,100,100,"gfx/earth.jpg")),
+		moon(new Sphere(1.f,100,100,"gfx/moon.jpg")),
+		mars(new Sphere(3.f,100,100,"gfx/mars.jpg")),
+		jupiter(new Sphere(10.f,100,100,"gfx/jupiter.jpg")),
+		saturn(new Sphere(8.f,100,100,"gfx/saturn.jpg")),
+		uranus(new Sphere(6.f,100,100,"gfx/uranus.jpg")),
+		neptune(new Sphere(5.f,100,100,"gfx/neptune.jpg")),
+	  sunSphere(new Sphere(5.f,100,100,"gfx/sun.jpeg")),
+	  sun(std::move(sunSphere), {0.f,0.f,0.f}, GL_LIGHT0)
 {
 	// Store pointer for input class
 	input = in;
@@ -18,7 +29,7 @@ Scene::Scene(Input *in)
 	fpsCam.setRotation({0.f,0.f,0.f});
 	fpsCam.updateRotation();
 
-	topDownCam.setPosition({0.f,200.f,0.f});
+	topDownCam.setPosition({0.f,800.f,0.f});
 	topDownCam.setRotation({-90.f,0.f,0.f});
 	topDownCam.updateRotation();
 
@@ -48,9 +59,20 @@ Scene::Scene(Input *in)
 
 	sun.load();
 	sun.setAmbient({0.6f,0.6f,0.6f,1.f});
+	sun.setAttenuation(1.f,0.f,0.f);
 
+	mercury->load();
+	venus->load();
 	earth->load();
+	moon->load();
+	mars->load();
+	jupiter->load();
+	saturn->load();
+	uranus->load();
+	neptune->load();
+
 	currentCam = &fpsCam;
+	glDisable(GL_LIGHT1);;
 	
 }
 
@@ -109,6 +131,16 @@ void Scene::handleInput(float dt)
 		fpsCam.updateRotation();
 	}
 
+	if(input->isKeyDown(';'))
+	{
+		if(bEnableSun)
+			glDisable(GL_LIGHT0);
+		else
+			glEnable(GL_LIGHT0);
+		bEnableSun = !bEnableSun;
+		input->setKeyUp(';');
+	}
+
 	if(input->isKeyDown(' '))
 	{
 		bIsPaused = !bIsPaused;
@@ -123,15 +155,9 @@ void Scene::handleInput(float dt)
 	}
 	if(input->isKeyDown('2'))
 	{
-		currentCam = &spaceShipCam;
-		skybox.updateCamera(currentCam);
-		input->setKeyUp('2');
-	}
-	if(input->isKeyDown('3'))
-	{
 		currentCam = &topDownCam;
 		skybox.updateCamera(currentCam);
-		input->setKeyUp('3');
+		input->setKeyUp('2');
 	}
 
 }
@@ -139,7 +165,7 @@ void Scene::handleInput(float dt)
 void Scene::update(float dt)
 {
 	// update scene related variables.
-	fpsCam.update();
+	currentCam->update();
 
 	// Calculate FPS for output
 	calculateFPS();
@@ -179,6 +205,9 @@ void Scene::render()
 			camLookAt.x,camLookAt.y,camLookAt.z,
 			-camUp.x,-camUp.y,-camUp.z);
 
+	float camMatrix[16];
+	glGetFloatv(GL_MODELVIEW_MATRIX, camMatrix);
+
 	if(bIsWireframe)
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -193,27 +222,100 @@ void Scene::render()
 	// Render geometry/scene here -------------------------------------
 
 	glPushMatrix();
-		sun.render();
+
+		if(bEnableSun)
+		{
+			sun.render();
+		}
+
+
+		// mercury
 		glPushMatrix();
-			glScalef(0.25f,0.25f,0.25f);
-			glRotatef(spaceshipAngle,0.f,1.f,0.f);
-			glTranslatef(55.f,0.f,0.f);
-			tardis.render();
+			glRotatef(earthSunRotation,0.f,1.f,0.f);
+			glTranslatef(0.f,0.f,10.f);
+			glRotatef(earthAngle+72,0.f,1.f,0.f);
+			mercury->render();
 		glPopMatrix();
+
+		// venus
+		glPushMatrix();
+			glRotatef(earthSunRotation+131,0.f,1.f,0.f);
+			glTranslatef(3.f,0.f,30.f);
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			venus->render();
+		glPopMatrix();
+
+		// earth
 		glPushMatrix();
 			glRotatef(earthSunRotation,0.f,1.f,0.f);
 			glTranslatef(50.f,0.f,10.f);
 			glRotatef(earthAngle,0.f,1.f,0.f);
 			earth->render();
 
-			if(currentCam != &spaceShipCam)
-			{
+			// tardis
+			glPushMatrix();
+				glScalef(0.25f,0.25f,0.25f);
+				glRotatef(spaceshipAngle,0.f,1.f,1.f);
+				glTranslatef(55.f,0.f,0.f);
+				tardis.render();
+			glPopMatrix();
+
+			// moon
+			glPushMatrix();
+				glRotatef(earthSunRotation,0.f,1.f,0.f);
+				glTranslatef(10.f,0.f,5.f);
+				moon->render();
+			glPopMatrix();
+		glPopMatrix();
+
+		// mars
+		glPushMatrix();
+			glRotatef(earthSunRotation+192,0.f,1.f,0.f);
+			glTranslatef(40.f,0.f,70.f);
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			mars->render();
+		glPopMatrix();
+
+		// jupiter
+		glPushMatrix();
+			glRotatef(earthSunRotation+252,0.f,1.f,0.f);
+			glTranslatef(0.f,0.f,130.f);
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			jupiter->render();
+		glPopMatrix();
+
+		// saturn
+		glPushMatrix();
+			glRotatef(earthSunRotation+44,0.f,1.f,0.f);
+			glTranslatef(10.f,0.f,170.f);
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			saturn->render();
+
+			// spaceship orbiting saturn
+			glPushMatrix();
 				glRotatef(-spaceshipAngle,0.f,1.f,0.f);
-				glTranslatef(0.f,0.f,7.f);
+				glTranslatef(6.f,0.f,17.f);
 				glRotatef(90.f,0.f,1.f,0.f);
 				spaceship.render();
-			}
+			glPopMatrix();
 		glPopMatrix();
+
+		// uranus
+		glPushMatrix();
+			glRotatef(earthSunRotation+156,0.f,1.f,0.f);
+			glTranslatef(20.f,0.f,200.f);
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			uranus->render();
+		glPopMatrix();
+
+		// neptune
+		glPushMatrix();
+			glRotatef(earthSunRotation+234,0.f,1.f,0.f);
+			glTranslatef(30.f,0.f,220.f);
+			glRotatef(earthAngle,0.f,1.f,0.f);
+			neptune->render();
+		glPopMatrix();
+
 	glPopMatrix();
 
 	// End render geometry --------------------------------------
@@ -290,11 +392,12 @@ void Scene::renderTextOutput()
 	// Render current mouse position and frames per second.
 	glDisable(GL_LIGHTING);
 	sprintf_s(mouseText, "Mouse: %i, %i", input->getMouseX(), input->getMouseY());
-	sprintf_s(pos, "Pos: {%f,%f,%f}", fpsCam.getPosition().x,fpsCam.getPosition().y,fpsCam.getPosition().z);
-	sprintf_s(camRotationText, "cam pit,yaw: {%f,%f}", fpsCam.getRotation().pitch,fpsCam.getRotation().yaw);
+	sprintf_s(pos, "Pos: {%f,%f,%f}", currentCam->getPosition().x,currentCam->getPosition().y,currentCam->getPosition().z);
+	sprintf_s(camRotationText, "cam pit,yaw: {%f,%f}", currentCam->getRotation().pitch,currentCam->getRotation().yaw);
 	displayText(-1.f, 0.96f, 1.f, 1.f, 0.f, mouseText);
 	displayText(-1.f, 0.90f, 1.f, 1.f, 0.f, fps);
 	displayText(-1.f, 0.84f, 1.f, 1.f, 0.f, pos);
+	displayText(-1.f, 0.7f, 1.f, 1.f, 0.f, spa);
 	displayText(-1.f, 0.78f, 1.f, 1.f, 0.f, camRotationText);
 	glEnable(GL_LIGHTING);
 }

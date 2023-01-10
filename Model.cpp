@@ -216,7 +216,6 @@ bool Model::load(const std::string& modelFilename)
 	bool result;
 
 	// Load in the model data,
-	glColor4f(0.5f,0.5f,0.5f,1.f);
 	result = loadModel(modelFilename.c_str());
 	if (!result)
 	{

@@ -6,10 +6,16 @@
 
 Tardis::Tardis()
 	: exterior(new Model()),
-	interior(new Model())
+	interior(new Model()),
+	lamp(new Sphere(0.25f,10.f,10.f,"gfx/white.png")),
+	light(std::move(lamp),{0.f,0.f,0.f},GL_LIGHT1)
 {
 	exterior->load("models/TARDIS.obj","gfx/Wood.jpg");
 	interior->load("models/interior/tardis.obj","gfx/crate.png");
+	light.setLightPosition({ 0.f, 5.f, 0.f });
+	light.setAmbient({ 0.2f, 0.2f, 0.2f });
+	light.setDiffuse({dimmer,dimmer,dimmer});
+	light.load();
 }
 
 void Tardis::render()
@@ -25,6 +31,7 @@ void Tardis::render()
 		glRotatef(angle, 0.f,1.f,0.f);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+		glColor4f(dimmer,dimmer,dimmer,dimmer);
 		glBegin(GL_QUADS);
 			glVertex3f(-2.f,2.6f,3.f);
 			glVertex3f(-2.f,-5.5f,3.f);
@@ -46,11 +53,17 @@ void Tardis::render()
 
 	// render exterior
 	glEnable(GL_LIGHTING);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glPushMatrix();
 		glRotatef(angle,0.f,1.f,0.f);
 		glRotatef(-90.f,0.f,1.f,0.f);
+		glColor4f(dimmer,dimmer,dimmer,dimmer);
 		exterior->render();
+		light.render();
 	glPopMatrix();
+
+	glDisable(GL_BLEND);
 
 
 	// render interior and disable depth to render on top of exterior
@@ -72,5 +85,12 @@ void Tardis::render()
 void Tardis::update(const float dt)
 {
 	angle += angleSpeed * dt;
+	if(dimmer >= 1.f || dimmer <= 0.f)
+	{
+		dimmerSpeed = -dimmerSpeed;
+	}
+
+	dimmer += dimmerSpeed * dt;
+	light.setDiffuse({dimmer,dimmer,dimmer});
 }
 

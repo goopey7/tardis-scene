@@ -37,18 +37,21 @@ void Sphere::render()
 
 void Sphere::loadTexture(const char* filename)
 {
-	texture = SOIL_load_OGL_texture
-	(
-		filename,
-		SOIL_LOAD_AUTO,
-		SOIL_CREATE_NEW_ID,
-		SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y // Depending on texture file type some need inverted others don't.
-	);
-
-	//check for an error during the load process
-	if (texture == 0)
+	if(filename != nullptr)
 	{
-		std::printf("SOIL loading error: '%s'\n", SOIL_last_result());
+		texture = SOIL_load_OGL_texture
+		(
+			filename,
+			SOIL_LOAD_AUTO,
+			SOIL_CREATE_NEW_ID,
+			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT | SOIL_FLAG_INVERT_Y // Depending on texture file type some need inverted others don't.
+		);
+
+		//check for an error during the load process
+		if (texture == 0)
+		{
+			std::printf("SOIL loading error: '%s'\n", SOIL_last_result());
+		}
 	}
 }
 

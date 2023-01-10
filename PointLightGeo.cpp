@@ -14,6 +14,8 @@ void PointLightGeo::render()
 {
 	PointLight::render();
 	glDisable(GL_LIGHTING);
+	Vector3 pos = {PointLight::getLightPosition()[0],PointLight::getLightPosition()[1],PointLight::getLightPosition()[2]};
+	glTranslatef(pos.x,pos.y,pos.z);
 	geometry->render();
 	glEnable(GL_LIGHTING);
 }

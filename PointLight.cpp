@@ -4,10 +4,13 @@
 
 void PointLight::render()
 {
-	glTranslatef(relativePos.x,relativePos.y,relativePos.z);
+	//glTranslatef(relativePos.x,relativePos.y,relativePos.z);
 	glLightfv(lightID,GL_AMBIENT,&ambient[0]);
 	glLightfv(lightID,GL_DIFFUSE,&diffuse[0]);
 	glLightfv(lightID,GL_POSITION,&lightPosition[0]);
+	glLightf(lightID, GL_CONSTANT_ATTENUATION, constAttenuation);
+	glLightf(lightID, GL_LINEAR_ATTENUATION, linearAttenuation);
+	glLightf(lightID, GL_QUADRATIC_ATTENUATION, quadAttenuation);
 	glEnable(lightID);
 }
 
@@ -37,5 +40,17 @@ void PointLight::setLightPosition(std::vector<GLfloat> lightPosition)
 void PointLight::setRelativePos(Vector3 relativePos)
 {
 	this->relativePos = relativePos;
+}
+
+std::vector<GLfloat> PointLight::getLightPosition() const
+{
+	return lightPosition;
+}
+
+void PointLight::setAttenuation(float constant, float linear, float quadratic)
+{
+	constAttenuation = constant;
+	linearAttenuation = linear;
+	quadAttenuation = quadratic;
 }
 
