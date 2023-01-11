@@ -2,7 +2,9 @@
 
 #include "GeoWithReflection.h"
 #include "Geometry.h"
-#include <GL/gl.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 
 void GeoWithReflection::render()

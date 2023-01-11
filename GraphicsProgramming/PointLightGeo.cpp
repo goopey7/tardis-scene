@@ -2,7 +2,9 @@
 
 #include "PointLightGeo.h"
 #include "PointLight.h"
-#include <GL/gl.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 PointLightGeo::PointLightGeo(std::unique_ptr<Geometry> geometry, Vector3 position, unsigned int lightID)
 	: geometry(std::move(geometry)),

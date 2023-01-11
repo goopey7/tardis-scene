@@ -2,9 +2,9 @@
 #include "Model.h"
 #include "PointLight.h"
 #include "Sphere.h"
-#include <GL/freeglut_std.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 // Scene constructor, initilises OpenGL
 // You should add further variables to need initilised.

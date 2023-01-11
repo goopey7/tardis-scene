@@ -1,8 +1,10 @@
 //Copyright Sam Collier 2022
 
 #include "SkySphere.h"
-#include <SOIL/SOIL.h>
-#include <GL/gl.h>
+#include "SOIL.h"
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 
 SkySphere::SkySphere(Camera* cam)

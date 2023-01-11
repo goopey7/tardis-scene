@@ -2,11 +2,11 @@
 #define _SHAPE_H
 
 #include "Geometry.h"
-#include <GL/freeglut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include <vector>
-#include <SOIL/SOIL.h>
+#include "SOIL.h"
 #include "Vector3.h"
 #include <string>
 

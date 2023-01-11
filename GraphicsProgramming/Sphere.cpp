@@ -1,5 +1,7 @@
 #include "Sphere.h"
-#include <GL/gl.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include <cmath>
 #include <fstream>
 

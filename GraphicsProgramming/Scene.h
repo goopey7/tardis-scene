@@ -7,13 +7,13 @@
 #define _SCENE_H
 
 // Include GLUT, openGL, input.
-#include <GL/freeglut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include "Input.h"
 #include <stdio.h>
 // Further includes should go here:
-#include <SOIL/SOIL.h>
+#include "SOIL.h"
 #include <vector>
 #include <string.h>
 

@@ -6,17 +6,17 @@
 
 // INCLUDES //
 #include "Geometry.h"
-#include <GL/freeglut.h>
 #include <fstream>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 using namespace std;
 
 // MY CLASS INCLUDES //
 #include <vector>
 #include "Vector3.h"
-#include <SOIL/SOIL.h>
+#include "SOIL.h"
 
 class Model : public Geometry
 {

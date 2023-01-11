@@ -1,8 +1,10 @@
 //Copyright Sam Collier 2022
 
 #include "Skybox.h"
-#include <SOIL/SOIL.h>
-#include <GL/gl.h>
+#include "SOIL.h"
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 
 Skybox::Skybox(Camera* cam)
 	: cam(cam),

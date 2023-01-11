@@ -10,6 +10,36 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GeoWithReflection.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="PointLightGeo.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Skybox.cpp" />
+    <ClCompile Include="SkySphere.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Tardis.cpp" />
+    <ClCompile Include="Vector3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Geometry.h" />
+    <ClInclude Include="GeoWithReflection.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="PointLight.h" />
+    <ClInclude Include="PointLightGeo.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Skybox.h" />
+    <ClInclude Include="SkySphere.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Tardis.h" />
+    <ClInclude Include="Vector3.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0B39DA7B-128B-4435-B59F-57A546CC90B9}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -75,6 +105,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)/glut</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

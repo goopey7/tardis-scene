@@ -1,7 +1,9 @@
 //Sam Collier 2023
 #pragma once
 
-#include <GL/gl.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include "Vector3.h"
 #include <vector>
 

@@ -1,13 +1,13 @@
 //Copyright Sam Collier 2022
 #pragma once
 
-#include <GL/freeglut.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "glut.h"
+#include <gl/GL.h>
+#include <gl/GLU.h>
 #include "Camera.h"
 #include "Input.h"
 #include <stdio.h>
-#include <SOIL/SOIL.h>
+#include "SOIL.h"
 #include "Sphere.h"
 class SkySphere
 {
